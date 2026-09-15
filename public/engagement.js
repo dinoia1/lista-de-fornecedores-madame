@@ -73,9 +73,8 @@
   const back=form.querySelector('.lead-back');
   const incentive=window.MADAME_CONFIG?.leadIncentive;
   const hasIncentive=typeof incentive?.headline==='string' && incentive.headline.trim() && typeof incentive.description==='string' && incentive.description.trim();
-  if(hasIncentive){dialog.querySelector('#lead-title').textContent=incentive.headline;dialog.querySelector('#lead-description').textContent='Conte seu momento em três etapas e siga para a oferta da coleção.';}
+  if(hasIncentive){dialog.querySelector('#lead-title').textContent=incentive.headline;dialog.querySelector('#lead-description').textContent='Conte um pouco sobre seu negócio em três etapas rápidas.';}
   if(hasIncentive && typeof incentive.referencePrice==='string' && typeof incentive.price==='string'){
-    dialog.querySelector('.lead-offer').hidden=false;
     dialog.querySelector('#lead-offer-reference').textContent=incentive.referencePrice;
     dialog.querySelector('#lead-offer-price').textContent=incentive.price;
   }
@@ -84,7 +83,7 @@
     step=index;steps.forEach((field,i)=>{field.hidden=i!==step;field.disabled=i!==step;});
     progress.forEach((item,i)=>{if(i===step)item.setAttribute('aria-current','step');else item.removeAttribute('aria-current');item.classList.toggle('is-complete',i<step);});
     dialog.querySelector('#lead-step-counter').textContent=`Etapa ${step+1} de 3`;
-    submit.querySelector('span').textContent=step<2?'Continuar':hasIncentive?'Concluir e ver minha condição':'Concluir meu cadastro';
+    submit.querySelector('span').textContent=step<2?'Continuar':'Concluir meu cadastro';
     back.hidden=step===0;status.textContent='';status.classList.remove('is-error');
     if(focus){dialog.scrollTop=0;const legend=steps[step].querySelector('legend');legend.tabIndex=-1;legend.focus();}
   }
@@ -131,6 +130,7 @@
       dialog.querySelector('.lead-progress').hidden=true;dialog.querySelector('#lead-step-counter').hidden=true;
       status.textContent='Pronto! Seu cadastro foi recebido. Obrigada pelo interesse na coleção.';
       if(hasIncentive){
+        dialog.querySelector('.lead-offer').hidden=!(typeof incentive.referencePrice==='string' && typeof incentive.price==='string');
         dialog.querySelector('#lead-title').textContent='Seu cadastro está pronto!';
         dialog.querySelector('#lead-description').textContent='Agora você pode seguir para o checkout da coleção.';
         dialog.querySelector('.lead-incentive').hidden=false;

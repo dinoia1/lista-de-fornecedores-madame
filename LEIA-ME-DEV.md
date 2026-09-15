@@ -66,7 +66,7 @@ As condições foram fornecidas pelo proprietário na referência visual:
 - Acesso vitalício.
 - Valores de referência: R$ 297,00, R$ 197,00, R$ 97,00, R$ 147,00, R$ 97,00, R$ 197,00 e R$ 97,00. Total: R$ 1.129,00.
 - Ancoragem comercial da coleção atualizada pelo proprietário: de R$ 997,00 por R$ 197,00 à vista. Esse preço de referência é independente da soma dos valores demonstrativos dos itens.
-- Formulário em três etapas: faixa de faturamento mensal, opção PF/PJ e dados de contato. A oferta aparece no popup, e o botão de checkout é revelado após salvar. Configuração em `leadIncentive`; não há cupom adicional. Abra `/#cadastro` para visualizar o formulário diretamente.
+- Formulário em três etapas: faixa de faturamento mensal, opção PF/PJ e dados de contato. O valor da oferta e o botão de checkout aparecem somente na confirmação após salvar. Configuração em `leadIncentive`; não há cupom adicional. Abra `/#cadastro` para visualizar o formulário diretamente.
 
 Esses valores são apresentados pela LP; a cobrança efetiva é responsabilidade da configuração na Lastlink. O parcelamento soma R$ 251,76. Confira a correspondência com o checkout antes de publicar alterações comerciais. A LP não simula nem confirma pagamentos.
 
