@@ -26,8 +26,6 @@
 .hero-branding{position:absolute;z-index:2;left:clamp(28px,5vw,100px);bottom:12%;width:31%;max-width:465px;transform:translateX(20%);text-align:left;isolation:isolate;pointer-events:none}
 .hero-branding::before{content:"";position:absolute;z-index:-1;inset:-55px -65px;background:radial-gradient(ellipse at center,rgba(11,9,11,.85) 12%,rgba(11,9,11,.6) 48%,transparent 73%);pointer-events:none}
 .hero-branding-logo{width:100%;max-width:345px;height:auto;margin:0 0 18px;filter:drop-shadow(0 4px 16px #0009)}
-.hero-branding-title{font-size:clamp(30px,4.1vw,66px);line-height:1.04;letter-spacing:-.04em;text-shadow:0 3px 18px #0009}
-.hero-branding-title em{color:var(--pink-light);font-style:italic}
 .hero-branding-subtitle{font-size:clamp(11px,1.15vw,17px);line-height:1.65;margin-top:18px;color:#f3e5ec;text-shadow:0 2px 8px #000}
 @media(max-width:1050px) and (min-width:761px){.hero-branding-logo{max-width:225px;margin-bottom:12px}.hero-branding-subtitle{margin-top:12px}.hero-branding{bottom:12%}}
 @media(max-width:760px){.hero-branding{display:none}}

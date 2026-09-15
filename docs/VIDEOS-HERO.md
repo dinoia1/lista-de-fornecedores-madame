@@ -1,6 +1,6 @@
 # Vídeos do hero
 
-Revisão atual: no desktop, a logo oficial, o título “Lista de Fornecedores” e o subtítulo ficam à esquerda da Madame, na área indicada pelo usuário, acima do degradê. No celular, a primeira dobra continua mostrando somente o vídeo. Evidência da composição atual: `output/playwright/hero-branding-check.txt`. As verificações de abertura sem textos descritas abaixo registram a revisão anterior.
+Revisão atual: no desktop, a logo oficial e o subtítulo “20 listas de fornecedores com mais de 900 itens” ficam à esquerda da Madame, acima do degradê, deslocados 20% da largura do bloco em direção ao centro. O título grande “Lista de Fornecedores” foi removido. No celular, a primeira dobra continua mostrando somente o vídeo. Evidência da composição atual: `output/playwright/hero-branding-check.txt`. As verificações de abertura sem textos descritas abaixo registram a revisão anterior.
 
 O hero inicial usa os dois arquivos enviados pelo usuário em 14/09/2026:
 
