@@ -10,6 +10,20 @@ let html=await readFile(new URL('../template.html',import.meta.url),'utf8');
 html=html.replace(/<!-- CATALOG_START -->[\s\S]*?<!-- CATALOG_END -->/,`<!-- CATALOG_START -->\n${cards}\n<!-- CATALOG_END -->`);
 const categoryIds=['15','09','01','04','18','19','10','11','02','03','05','06'];
 const categories=categoryIds.map(id=>catalog.find(item=>item.id===id));
-html=html.replace('<!-- CATEGORY_ITEMS -->',categories.map(item=>`<li><a class="category-item" href="#colecao"><img src="assets/lista-${item.id}.webp" alt="" width="56" height="79" loading="lazy"><span>${escape(item.id==='15'?'Moda feminina':item.name)}</span><svg aria-hidden="true"><use href="#arrow"/></svg></a></li>`).join('\n'));
+const categoryIcons={
+  '15':'<path d="M9 4a3 3 0 0 1 6 0c0 2-3 2-3 4v2L3 16a2 2 0 0 0 1 4h16a2 2 0 0 0 1-4l-9-6"/>',
+  '09':'<path d="M7 12h10v9H7zM9 12V5l6-3v10M7 16h10"/>',
+  '01':'<path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/>',
+  '04':'<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/>',
+  '18':'<path d="m8 4-5 3 2 5 3-1v9h8v-9l3 1 2-5-5-3a4 4 0 0 1-8 0Z"/><path d="M10 14h4m-2-2v4"/>',
+  '19':'<path d="m7 4-5 3 2 5 3-1-1 10h12l-1-10 3 1 2-5-5-3a5 5 0 0 1-10 0Z"/><path d="M9 15h6m-3-3v6"/>',
+  '10':'<path d="m3 8 4-5h10l4 5-9 13Zm0 0h18M7 3l5 18 5-18"/>',
+  '11':'<rect x="4" y="7" width="16" height="14" rx="2"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/>',
+  '02':'<rect x="3" y="12" width="9" height="9" rx="1"/><rect x="12" y="12" width="9" height="9" rx="1"/><rect x="7" y="3" width="9" height="9" rx="1"/><path d="M10 7h3M6 16h3m7 1h2"/>',
+  '03':'<path d="m4 16 12-12a2 2 0 0 1 4 4L8 20l-5 1Zm10-10 4 4M4 16l4 4"/>',
+  '05':'<ellipse cx="5" cy="10" rx="2" ry="3"/><ellipse cx="10" cy="5" rx="2" ry="3"/><ellipse cx="16" cy="5" rx="2" ry="3"/><ellipse cx="21" cy="11" rx="2" ry="3"/><path d="M8 14c2-4 6-4 8 0l3 4c1 4-3 4-6 2-3 2-7 2-6-2Z"/>',
+  '06':'<path d="M14 6a6 6 0 0 0-7 7l-5 5a2 2 0 0 0 4 4l5-5a6 6 0 0 0 7-7l-4 3-3-3Z"/>'
+};
+html=html.replace('<!-- CATEGORY_ITEMS -->',categories.map(item=>`<li><a class="category-item" href="#colecao"><svg class="category-icon" viewBox="0 0 24 24" aria-hidden="true">${categoryIcons[item.id]}</svg><span>${escape(item.id==='15'?'Moda feminina':item.name)}</span></a></li>`).join('\n'));
 await writeFile(new URL('../public/index.html',import.meta.url),html);
 console.log('Built public/index.html with 12 category slides and the collection offer.');
