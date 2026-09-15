@@ -33,7 +33,7 @@ npm.cmd run check
 
 Não edite diretamente `public/index.html`: ele é gerado a partir de `template.html` e `catalog.json`. Alterações em CSS, JS, imagens e configuração dispensam build.
 
-O checkout está configurado para `https://lastlink.com/p/C01555529/checkout-payment/`, informado pelo usuário. O botão da oferta e o botão fixo mobile usam esse endereço com o texto “Comprar agora”. Sem um endereço HTTPS válido, os botões levam à seção de apresentação do formato. Nenhum preço ou condição comercial é exibido enquanto seu campo estiver vazio. Preencha apenas informações confirmadas. Exemplo de formato para futuras alterações:
+O checkout está configurado para `https://lastlink.com/p/C01555529/checkout-payment/`, informado pelo usuário. O botão da oferta e o botão fixo mobile usam esse endereço com o texto “Acessar a Lista”. Sem um endereço HTTPS válido, os botões levam à seção de apresentação do formato. Nenhum preço ou condição comercial é exibido enquanto seu campo estiver vazio. Preencha apenas informações confirmadas. Exemplo de formato para futuras alterações:
 
 ```js
 checkoutUrl: 'https://seu-provedor.com/seu-checkout',
@@ -63,3 +63,5 @@ Os scripts Python são registros opcionais da importação inicial, não são ne
 Os PDFs completos, links privados de fornecedores e dados de compradores não estão incluídos no site nem no pacote.
 
 As capturas em `output/`, arquivos ZIP, logs e configurações locais estão excluídos do Git pelo `.gitignore`. Os vídeos e as capas necessários para executar o site são versionados. Validação da revisão atual: build e checagem estática aprovados; composição do hero conferida em 1440, 1024, 768, 430, 390 e 320 px, sem erros JavaScript ou transbordamento horizontal. No celular, a logo e o subtítulo ficam na parte inferior do vídeo, dentro da primeira dobra.
+
+Oferta atual: valores e acesso vitalício informados pelo usuário na referência de 15/09/2026. Valores de referência: R$ 297,00, R$ 197,00, R$ 97,00, R$ 147,00, R$ 97,00, R$ 197,00 e R$ 97,00 (total R$ 1.129,00). Oferta: 12x de R$ 20,98 ou R$ 197,00 à vista. Edite em public/config.js. Os valores são riscados uma vez ao aparecerem na tela; a preferência por movimento reduzido mostra os riscos sem animação. O teste confirma a exibição e o destino dos botões; não realiza pagamento nem verifica as condições no provedor.

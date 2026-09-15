@@ -39,7 +39,17 @@
     });
     $('.mobile-sticky').setAttribute('aria-label','Comprar a coleção');
   }
-  const labels = {price:'Valor',installments:'Pagamento',guarantee:'Garantia',accessPeriod:'Acesso',updates:'Atualizações'};
+  const pricingFields={price:'#offer-price',installments:'#offer-installments',referenceTotal:'#offer-reference-total'};
+  Object.entries(pricingFields).forEach(([key,selector])=>{
+    if(typeof config[key]!=='string'||!config[key].trim())return;
+    $(selector).textContent=config[key];$(selector).hidden=false;$('#offer-pricing').hidden=false;
+  });
+  document.querySelectorAll('[data-reference]').forEach(element=>{
+    const value=config.referenceValues?.[Number(element.dataset.reference)];
+    if(typeof value==='string'&&value.trim()){element.textContent=value;element.setAttribute('aria-label','Valor de referência: '+value);element.hidden=false;}
+  });
+  if(typeof config.accessPeriod==='string'&&config.accessPeriod.trim())$('#offer-access').textContent=' • conteúdo '+config.accessPeriod.toLowerCase();
+  const labels = {guarantee:'Garantia',updates:'Atualizações'};
   const terms = $('#offer-terms');
   Object.entries(labels).forEach(([key,label]) => {
     if(typeof config[key] !== 'string' || !config[key].trim())return;

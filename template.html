@@ -9,10 +9,10 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%230b090b'/%3E%3Cpath d='M12 24 22 12h20l10 12-20 29Z' fill='none' stroke='%23e2bb75' stroke-width='4'/%3E%3Cpath d='m12 24 40 0M22 12l10 41 10-41' fill='none' stroke='%23eb168a' stroke-width='3'/%3E%3C/svg%3E">
   <link rel="preload" href="assets/hero.webp" as="image" fetchpriority="high">
 
-  <link rel="stylesheet" href="style.css?v=entrega-mina">
-  <script defer src="config.js?v=lastlink"></script>
-  <script defer src="app.js?v=acesso-mina"></script>
-  <script defer src="engagement.js?v=carrossel-3d"></script>
+  <link rel="stylesheet" href="style.css?v=oferta-premium">
+  <script defer src="config.js?v=oferta-premium"></script>
+  <script defer src="app.js?v=oferta-premium"></script>
+  <script defer src="engagement.js?v=oferta-premium"></script>
 </head>
 <body>
   <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
@@ -110,21 +110,28 @@
       <div class="container">
         <div class="collection-card reveal">
           <ul class="collection-benefits" aria-label="O que você encontra na coleção">
-            <li><svg aria-hidden="true"><use href="#check"/></svg><span>20 segmentos de fornecedores</span></li>
-            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Mais de 900 fontes para pesquisar</span></li>
-            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Listas organizadas por segmento</span></li>
-            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Links para consultar fornecedores</span></li>
-            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Fichas e informações disponíveis</span></li>
-            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Catálogos conforme cada fornecedor</span></li>
-            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Informações para iniciar suas cotações</span></li>
+            <li><svg aria-hidden="true"><use href="#check"/></svg><span>20 segmentos de fornecedores</span><s class="reference-value" data-reference="0" hidden></s></li>
+            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Mais de 900 fontes para pesquisar</span><s class="reference-value" data-reference="1" hidden></s></li>
+            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Listas organizadas por segmento</span><s class="reference-value" data-reference="2" hidden></s></li>
+            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Links para consultar fornecedores</span><s class="reference-value" data-reference="3" hidden></s></li>
+            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Fichas e informações disponíveis</span><s class="reference-value" data-reference="4" hidden></s></li>
+            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Catálogos conforme cada fornecedor</span><s class="reference-value" data-reference="5" hidden></s></li>
+            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Informações para iniciar suas cotações</span><s class="reference-value" data-reference="6" hidden></s></li>
           </ul>
           <div class="collection-offer">
-            <h2>Coleção completa</h2>
-            <p class="collection-description">Encontre caminhos para pesquisar fornecedores para o seu negócio.</p>
+            <p class="premium-kicker">COLEÇÃO PREMIUM</p>
+            <h2>Acesso completo e vitalício</h2>
+            <p class="collection-description">Tenha acesso à coleção completa da Mina de Fornecedores e explore um acervo organizado para encontrar caminhos reais de pesquisa para o seu negócio.</p>
             <div class="offer-number">20<span>segmentos</span></div>
             <p class="collection-count">956 cadastros de fornecedores identificados</p>
+            <div class="offer-pricing" id="offer-pricing" hidden>
+              <s class="reference-value reference-total" id="offer-reference-total" hidden></s>
+              <p class="premium-installments" id="offer-installments" hidden></p>
+              <p class="premium-cash" id="offer-price" hidden></p>
+            </div>
             <div class="offer-terms" id="offer-terms" hidden></div>
             <a class="button collection-buy" id="explore-complete" href="#por-dentro">Conhecer o formato <svg aria-hidden="true"><use href="#arrow"/></svg></a>
+            <p class="payment-note"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V6a4 4 0 0 1 8 0v4m-4 5v3"/></svg><span>Pagamento seguro • acesso online<span id="offer-access"></span></span></p>
             <button type="button" class="lead-open" data-lead-open>Receber informações</button>
           </div>
         </div>
