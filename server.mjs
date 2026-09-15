@@ -4,16 +4,21 @@ import {createReadStream} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createLeadHandler} from './lead-store.mjs';
+import {createAdminHandler} from './admin-store.mjs';
 const root=path.join(path.dirname(fileURLToPath(import.meta.url)), 'public');
 const handleLead=createLeadHandler(process.env.LEADS_DIR || path.join(root,'..','data'));
+const handleAdmin=createAdminHandler(process.env.LEADS_DIR || path.join(root,'..','data'));
+await handleAdmin.initialize();
 const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2','.mp4':'video/mp4'};
 const server=http.createServer(async(req,res)=>{
+  const route=req.url.split('?')[0];
+  if(route.startsWith('/api/admin/') || route==='/api/track') {await handleAdmin(req,res);return;}
   if(req.url.split('?')[0]==='/api/leads') { await handleLead(req,res); return; }
   if(!['GET','HEAD'].includes(req.method)){res.writeHead(405,{'Allow':'GET, HEAD'});res.end();return;}
   try{
     const url=new URL(req.url,'http://localhost');
     const name=decodeURIComponent(url.pathname);
-    const file=path.resolve(root,'.'+(name==='/'?'/index.html':name));
+    const file=path.resolve(root,'.'+(name==='/'?'/index.html':['/admin','/admin/'].includes(name)?'/admin/index.html':name));
     const rel=path.relative(root,file);
     if(rel.startsWith('..')||path.isAbsolute(rel)||!types[path.extname(file)])throw Error('not public');
     const info=await stat(file);

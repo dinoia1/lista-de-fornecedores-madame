@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Madame · Painel administrativo</title><link rel="icon" href="/assets/logo.webp"><link rel="stylesheet" href="/admin/style.css"><script src="/admin/app.js" defer></script></head>
+<body>
+  <section id="login" class="login-shell" hidden>
+    <form id="login-form" class="login-card">
+      <input type="text" name="username" value="admin" autocomplete="username" hidden>
+      <img src="/assets/logo.webp" width="290" height="104" alt="Garimpo da Madame">
+      <p class="eyebrow">ÁREA ADMINISTRATIVA</p><h1>Seu negócio,<br><em>por dentro.</em></h1>
+      <p class="muted">Acompanhe os contatos e os caminhos que levam até a sua mina.</p>
+      <label>Senha de acesso<input name="password" type="password" required autocomplete="current-password" maxlength="256"></label>
+      <button type="submit" class="primary">Entrar no painel <span aria-hidden="true">→</span></button>
+      <p id="login-message" role="status"></p><a href="/">← Voltar ao site</a>
+    </form>
+  </section>
+  <div id="dashboard" hidden>
+    <header class="topbar"><a href="/" aria-label="Abrir site"><img src="/assets/logo.webp" width="174" height="62" alt="Garimpo da Madame"></a><span class="workspace">GESTÃO DA MINA</span><nav aria-label="Conta"><button id="password-open">Trocar senha</button><button id="logout">Sair ↗</button></nav></header>
+    <main>
+      <div class="page-heading"><div><p class="eyebrow">INTELIGÊNCIA DO SEU NEGÓCIO</p><h1>Leads & <em>tráfego.</em></h1><p class="muted">Entenda de onde chegam e quem dá o próximo passo.</p></div><a class="outline" href="/" target="_blank" rel="noopener">Ver landing page ↗</a></div>
+      <form id="filters" class="filters"><label>De<input type="date" name="from" required></label><label>Até<input type="date" name="to" required></label><label>Origem<select name="source"><option value="">Todas as origens</option></select></label><label>Campanha<select name="campaign"><option value="">Todas as campanhas</option></select></label><button class="primary" type="submit">Atualizar ↻</button></form>
+      <p id="page-message" role="status" aria-live="polite">Carregando dados…</p>
+      <section class="metrics" aria-label="Indicadores do período">
+        <article><span>Sessões</span><strong id="metric-sessions">—</strong><small id="metric-views">Visitas à landing page</small></article>
+        <article><span>Leads capturados</span><strong id="metric-leads">—</strong><small>Contatos salvos no servidor</small></article>
+        <article><span>Conversão em lead</span><strong id="metric-conversion">—</strong><small>Sessões com cadastro / sessões</small></article>
+        <article><span>Cliques no checkout</span><strong id="metric-clicks">—</strong><small>Intenção de compra, sem confirmação</small></article>
+      </section>
+      <div class="analytics-grid">
+        <section class="panel"><div class="panel-title"><h2>Movimento da mina</h2><span class="muted">Sessões e leads por dia</span></div><div id="timeline" class="timeline"></div></section>
+        <section class="panel"><div class="panel-title"><h2>Origens do tráfego</h2><span class="muted">De onde chegam</span></div><div class="table-scroll"><table><thead><tr><th>Origem</th><th>Sessões</th><th>Leads</th><th>Checkout</th></tr></thead><tbody id="sources"></tbody></table></div></section>
+      </div>
+      <section class="panel campaigns"><div class="panel-title"><h2>Campanhas & dispositivos</h2><p id="devices" class="muted"></p></div><div class="table-scroll"><table><thead><tr><th>Campanha UTM</th><th>Sessões</th><th>Leads</th><th>Checkout</th></tr></thead><tbody id="campaigns"></tbody></table></div></section>
+      <section class="panel leads-panel"><div class="panel-title"><div><p class="eyebrow">SEUS PRÓXIMOS CONTATOS</p><h2>Leads capturados</h2></div><button id="export" class="outline">Exportar CSV ↓</button></div><form id="search-form" class="search"><label for="search">Buscar contato</label><input id="search" type="search" placeholder="Nome, e-mail ou telefone" maxlength="120"><button type="submit">Buscar</button></form><div class="table-scroll"><table class="leads-table"><thead><tr><th>Contato</th><th>Telefone</th><th>Origem / campanha</th><th>Cadastro</th></tr></thead><tbody id="leads"></tbody></table></div><div class="pagination"><span id="lead-count"></span><div><button id="previous" aria-label="Página anterior">←</button><span id="page-count"></span><button id="next" aria-label="Próxima página">→</button></div></div></section>
+      <details class="panel help"><summary>Como interpretar e identificar as origens</summary><p>Use links com UTM nas suas campanhas para identificar a origem. Exemplo:</p><code>/?utm_source=instagram&amp;utm_medium=social&amp;utm_campaign=lancamento</code><p>Uma sessão agrupa os acessos na mesma aba com até 30 minutos entre carregamentos. “Direto / não identificado” inclui acessos sem UTM ou referência disponível. Cadastros antigos continuam no painel, mas não têm origem recuperável.</p><p>Os números representam os eventos recebidos desde a ativação da medição. Bloqueadores, bots e restrições do navegador podem afetar as contagens. A conversão conta sessões com cadastro e visita dentro do período selecionado. Busca por contato filtra somente a tabela e a exportação. Datas no horário de São Paulo.</p><p>Cliques no checkout não são vendas. Pagamentos confirmados dependem de uma integração com a Lastlink.</p></details>
+      <footer>GARIMPO DA MADAME <span>Seu próximo passo começa com informação.</span></footer>
+    </main>
+  </div>
+  <dialog id="password-dialog"><form id="password-form"><p class="eyebrow">SEGURANÇA DA CONTA</p><h2>Trocar senha</h2><label>Senha atual<input type="password" name="current" required autocomplete="current-password" maxlength="256"></label><label>Nova senha<input type="password" name="password" required minlength="12" maxlength="256" autocomplete="new-password"></label><p class="muted">Use pelo menos 12 caracteres. Você entrará novamente após a troca.</p><p id="password-message" role="status"></p><div class="dialog-actions"><button type="button" id="password-close">Cancelar</button><button class="primary" type="submit">Salvar senha</button></div></form></dialog>
+</body></html>

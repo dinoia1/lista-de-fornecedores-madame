@@ -1,0 +1,40 @@
+(() => {
+  'use strict';
+  const $=s=>document.querySelector(s), login=$('#login'), dashboard=$('#dashboard'), filters=$('#filters');
+  let page=1, pages=1, requestNumber=0;
+  const number=v=>new Intl.NumberFormat('pt-BR',{maximumFractionDigits:1}).format(v);
+  const date=v=>new Intl.DateTimeFormat('pt-BR',{timeZone:'America/Sao_Paulo',dateStyle:'short',timeStyle:'short'}).format(new Date(v));
+  const localDay=v=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'}).format(v);
+  filters.elements.from.value=localDay(new Date(Date.now()-29*86400000));filters.elements.to.value=localDay(new Date());
+  function showLogin(){dashboard.hidden=true;login.hidden=false;$('#login-form').elements.password.focus();}
+  async function api(url, data) {
+    const response=await fetch(url,data?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}:{});
+    const result=await response.json();if(!response.ok){if(response.status===401 && !url.endsWith('/login')&&!url.endsWith('/password'))showLogin();throw Error(result.error || 'Não foi possível concluir.');}return result;
+  }
+  function params(){const result=new URLSearchParams(new FormData(filters));result.set('q',$('#search').value);result.set('page',page);return result;}
+  function element(tag,text,className){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(className)e.className=className;return e;}
+  function empty(container,colspan,message){container.replaceChildren();const row=element('tr'),cell=element('td',message,'empty');cell.colSpan=colspan;row.append(cell);container.append(row);}
+  function breakdown(id, rows){const target=$(id);target.replaceChildren();if(!rows.length){empty(target,4,'Nenhum dado neste período.');return;}rows.forEach(item=>{const row=element('tr');[item.name,number(item.sessions),number(item.leads),number(item.clicks)].forEach(value=>row.append(element('td',value)));target.append(row);});}
+  function options(select,values,label){const current=select.value;select.replaceChildren(new Option(label,''));values.forEach(value=>select.add(new Option(value,value)));if(current&&!values.includes(current))select.add(new Option(current,current));select.value=current;}
+  function timeline(rows){const target=$('#timeline');target.replaceChildren();if(!rows.length){target.append(element('p','As visitas aparecerão aqui conforme o site receber acessos.','empty'));return;}const max=Math.max(1,...rows.map(row=>row.sessions));rows.forEach(item=>{const row=element('div',undefined,'day-row');row.append(element('span',item.name.slice(8)+'/'+item.name.slice(5,7)));const bar=element('span',undefined,'bar');const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 100 8');svg.setAttribute('preserveAspectRatio','none');svg.setAttribute('aria-hidden','true');const rect=document.createElementNS(svg.namespaceURI,'rect');rect.setAttribute('width',String(item.sessions/max*100));rect.setAttribute('height','8');rect.setAttribute('fill','#e2bb75');svg.append(rect);bar.append(svg);row.append(bar,element('span',`${number(item.sessions)} visitas · ${number(item.leads)} leads`));target.append(row);});}
+  function render(data){
+    $('#metric-sessions').textContent=number(data.sessions);$('#metric-views').textContent=number(data.views)+' páginas visualizadas';$('#metric-leads').textContent=number(data.totalLeads);$('#metric-conversion').textContent=number(data.conversion)+'%';$('#metric-clicks').textContent=number(data.clicks);
+    breakdown('#sources',data.sources);breakdown('#campaigns',data.campaigns);timeline(data.daily);
+    $('#devices').textContent=data.devices.map(item=>`${item.name}: ${number(item.sessions)} sessões`).join(' · ');
+    options(filters.elements.source,data.availableSources,'Todas as origens');options(filters.elements.campaign,data.availableCampaigns,'Todas as campanhas');
+    const target=$('#leads');target.replaceChildren();
+    if(!data.leads.length)empty(target,4,'Nenhum lead encontrado. Ajuste os filtros ou aguarde novos cadastros.');
+    data.leads.forEach(lead=>{const row=element('tr'),contact=element('td');contact.append(element('strong',lead.name),element('small',lead.email));const phone=element('td'),a=element('a',lead.phone);a.href='tel:'+lead.phone.replace(/[^+\d]/g,'');phone.append(a);const origin=element('td',lead.attribution.source);origin.append(element('small',[lead.attribution.campaign,lead.attribution.medium].filter(Boolean).join(' · ')||'Sem campanha'));row.append(contact,phone,origin,element('td',date(lead.createdAt)));target.append(row);});
+    page=data.page;pages=data.pages;$('#lead-count').textContent=number(data.matched)+' contatos encontrados';$('#page-count').textContent=page+' / '+pages;$('#previous').disabled=page<=1;$('#next').disabled=page>=pages;
+    $('#page-message').textContent=`Atualizado às ${new Date().toLocaleTimeString('pt-BR')}${data.unattributed ? ' · '+data.unattributed+' leads sem sessão atribuída.' : ''}`;
+  }
+  async function refresh(){const id=++requestNumber;const message=$('#page-message');message.classList.remove('error');message.textContent='Atualizando dados…';try{const data=await api('/api/admin/dashboard?'+params());if(id===requestNumber)render(data);}catch(error){if(id===requestNumber){message.textContent=error.message;message.classList.add('error');}}}
+  $('#login-form').addEventListener('submit',async event=>{event.preventDefault();const button=event.currentTarget.querySelector('button');button.disabled=true;$('#login-message').textContent='Entrando…';try{await api('/api/admin/login',{password:event.currentTarget.elements.password.value});$('#login-form').reset();$('#login-message').textContent='';login.hidden=true;dashboard.hidden=false;await refresh();}catch(error){$('#login-message').textContent=error.message;$('#login-message').classList.add('error');}finally{button.disabled=false;}});
+  filters.addEventListener('submit',event=>{event.preventDefault();page=1;refresh();});$('#search-form').addEventListener('submit',event=>{event.preventDefault();page=1;refresh();});
+  $('#previous').addEventListener('click',()=>{if(page>1){page--;refresh();}});$('#next').addEventListener('click',()=>{if(page<pages){page++;refresh();}});
+  $('#logout').addEventListener('click',async()=>{try{await api('/api/admin/logout',{});showLogin();}catch(error){$('#page-message').textContent=error.message;}});
+  $('#export').addEventListener('click',async()=>{const button=$('#export');button.disabled=true;try{const response=await fetch('/api/admin/export?'+params());if(!response.ok){const error=await response.json();if(response.status===401)showLogin();throw Error(error.error);}const blob=await response.blob(),url=URL.createObjectURL(blob),link=element('a');link.href=url;link.download='leads-madame.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(error){$('#page-message').textContent=error.message;$('#page-message').classList.add('error');}finally{button.disabled=false;}});
+  const dialog=$('#password-dialog');$('#password-open').addEventListener('click',()=>dialog.showModal());$('#password-close').addEventListener('click',()=>dialog.close());
+  $('#password-form').addEventListener('submit',async event=>{event.preventDefault();const button=event.currentTarget.querySelector('[type=submit]');button.disabled=true;try{await api('/api/admin/password',Object.fromEntries(new FormData(event.currentTarget)));event.target.reset();dialog.close();showLogin();$('#login-message').textContent='Senha atualizada. Entre com a nova senha.';}catch(error){$('#password-message').textContent=error.message;}finally{button.disabled=false;}});
+  api('/api/admin/session').then(()=>{login.hidden=true;dashboard.hidden=false;refresh();}).catch(showLogin);
+})();

@@ -46,9 +46,9 @@ updates: null
 
 ## Publicar
 
-Para publicar o site com captura de leads, use hospedagem Node com disco persistente e execute `npm start`. Configure `HOST=0.0.0.0` se necessário e HTTPS na plataforma. O servidor disponibiliza somente `public/` e a API `POST /api/leads`; cadastros ficam em `data/leads.jsonl`, fora da área pública e do Git. Veja `docs/LEADS.md`. Uma hospedagem somente estática apresenta a LP, mas não recebe os cadastros. O código está no GitHub; a hospedagem pública ainda não foi configurada.
+Para publicar o site com captura de leads e painel administrativo, use hospedagem Node com disco persistente e execute `npm start`. Configure `HOST=0.0.0.0` se necessário e HTTPS na plataforma. Os arquivos públicos ficam em `public/`; contatos, eventos e autenticação ficam em `data/`, fora da área pública e do Git. Veja `docs/LEADS.md` e `docs/ADMIN.md`. Uma hospedagem somente estática não atende às APIs. A hospedagem pública ainda não foi configurada.
 
-A compra é encaminhada ao checkout Lastlink. A LP recebe leads no servidor, mas não possui painel administrativo, envio automático de mensagens, rastreamento ou área de membros. A seção “Por dentro” está identificada como demonstração. O produto apresentado é a coleção de listas.
+A compra é encaminhada ao checkout Lastlink. Acesse `/admin` para consultar e exportar leads e acompanhar origens, campanhas, sessões e cliques. A senha inicial é gerada no arquivo privado `data/admin-first-access.txt`; troque-a no painel após entrar. Alternativamente, defina `ADMIN_PASSWORD` antes da primeira execução. Leia `docs/ADMIN.md` para configuração e definições das métricas. Não há confirmação de vendas, envio automático de mensagens ou área de membros. A seção “Por dentro” é uma demonstração.
 
 ## Arquivos entregues
 

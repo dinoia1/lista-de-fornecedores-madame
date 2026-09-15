@@ -1,6 +1,6 @@
 # Entrega para desenvolvimento — Garimpo da Madame
 
-Data: 15/09/2026. Base do código: commit `b9267d3`.
+Data: 15/09/2026. Revisão: painel administrativo, captura e atribuição de tráfego.
 Repositório privado: https://github.com/dinoia1/lista-de-fornecedores-madame
 
 Este pacote contém a landing page editável, os vídeos, as imagens, o servidor de captura de leads e documentação técnica. O acesso ao repositório privado depende de convite do proprietário; o ZIP pode ser usado de forma independente.
@@ -15,6 +15,7 @@ Este pacote contém a landing page editável, os vídeos, as imagens, o servidor
 npm.cmd run build
 npm.cmd run check
 npm.cmd run test:leads
+npm.cmd run test:admin
 npm.cmd start
 ```
 
@@ -36,6 +37,9 @@ Python não é necessário para executar a aplicação. Os scripts Python regist
 | `public/assets/` | Dois vídeos MP4, logo, imagens e capas WebP. |
 | `server.mjs` | Servidor HTTP, arquivos públicos, streaming de vídeo e rota da API. |
 | `lead-store.mjs` | Validação e persistência privada dos leads. |
+| `admin-store.mjs` e `attribution.mjs` | Autenticação, relatórios, exportação e normalização da origem. |
+| `public/admin/` e `public/analytics.js` | Painel administrativo e medição de acessos e cliques. |
+| `docs/ADMIN.md` | Primeiro acesso, campanhas UTM, métricas e operação do painel. |
 | `scripts/check-leads.mjs` | Testes de validação, armazenamento, concorrência e proteção da API. |
 | `docs/LEADS.md` | Operação, limites, armazenamento e consulta de leads. |
 
@@ -77,7 +81,7 @@ O servidor recebe `POST /api/leads` com JSON:
 }
 ```
 
-O cadastro só é confirmado após a gravação. Os contatos são armazenados em `data/leads.jsonl`; a pasta é criada no primeiro cadastro real. `LEADS_DIR` permite configurar outro diretório privado persistente. Nome, telefone, e-mail, data, identificador e versão da autorização são gravados. Não há painel de gestão ou envio automático de mensagens.
+O cadastro só é confirmado após a gravação. Os contatos são armazenados em `data/leads.jsonl`. `LEADS_DIR` permite configurar outro diretório privado persistente. Nome, telefone, e-mail, data, identificador, versão da autorização e atribuição de origem/campanha são gravados. O painel `/admin` consulta e exporta contatos e apresenta tráfego, campanhas e conversão em lead. A senha inicial fica no arquivo privado `data/admin-first-access.txt`, gerado ao iniciar; troque-a pelo painel. `ADMIN_PASSWORD` pode definir a senha antes da primeira execução. Leia `docs/ADMIN.md`. Não há envio automático de mensagens ou comprovação de pagamentos.
 
 Dados de leads, credenciais, `.env`, histórico Git e PDFs pagos NÃO integram este pacote. O servidor não disponibiliza um endpoint público de leitura de cadastros. Para consulta local e operação, leia `docs/LEADS.md`.
 
@@ -101,7 +105,7 @@ O armazenamento JSONL é apropriado para uma instância. Para múltiplas instân
 
 Antes de entregar uma alteração:
 
-1. Execute build, check e test:leads.
+1. Execute build, check, test:leads e test:admin.
 2. Confira o desktop e celulares de 320 e 390 px, o vídeo e o carrossel.
 3. Confira os links da Lastlink sem concluir uma compra.
 4. Teste o formulário com dados fictícios em um diretório separado usando `LEADS_DIR`.

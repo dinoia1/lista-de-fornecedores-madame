@@ -96,7 +96,7 @@
     const controller=new AbortController();
     const timeout=setTimeout(()=>controller.abort(),15000);
     try {
-      const response=await fetch('/api/leads',{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,body:JSON.stringify({name:form.elements.name.value,phone:phone.value,email:form.elements.email.value,consent:form.elements.consent.checked,website:form.elements.website.value})});
+      const response=await fetch('/api/leads',{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,body:JSON.stringify({name:form.elements.name.value,phone:phone.value,email:form.elements.email.value,consent:form.elements.consent.checked,website:form.elements.website.value,attribution:window.MADAME_ATTRIBUTION})});
       const result=await response.json();
       if(!response.ok||result.ok!==true)throw Error(result.message || 'Não foi possível enviar. Tente novamente.');
       form.hidden=true;done.hidden=false;

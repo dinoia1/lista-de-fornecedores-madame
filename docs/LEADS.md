@@ -4,6 +4,8 @@ O popup solicita nome, telefone brasileiro com DDD e e-mail, com autorização e
 
 O servidor recebe `POST /api/leads` e só confirma sucesso depois de salvar. Os registros ficam em `data/leads.jsonl`, um objeto JSON por linha, com identificador, data UTC, nome, telefone normalizado, e-mail e versão da autorização (`contact-v1`). A pasta é criada no primeiro cadastro. Não há endpoint público para consultar leads. O conteúdo de `data/` está excluído do Git e do ZIP de entrega.
 
+Para consultar e exportar pelo navegador, abra `/admin` e entre com a senha administrativa. O painel também apresenta origem e campanha dos novos contatos; veja `docs/ADMIN.md`. Os cadastros anteriores são preservados sem inventar uma origem.
+
 Para consultar os cadastros no próprio servidor, execute no PowerShell, na pasta do projeto:
 
 ```powershell

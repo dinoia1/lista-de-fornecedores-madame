@@ -1,6 +1,7 @@
 import {mkdir, appendFile} from 'node:fs/promises';
 import path from 'node:path';
 import {randomUUID} from 'node:crypto';
+import {attribution} from './attribution.mjs';
 
 export function createLeadHandler(directory) {
   const attempts = new Map();
@@ -41,6 +42,7 @@ export function createLeadHandler(directory) {
         reply(400,'Confira nome, telefone, e-mail e a autorização para contato.'); return;
       }
       const lead={id:randomUUID(),createdAt:new Date().toISOString(),name,phone:'+55'+phone,email,consent:true,consentVersion:'contact-v1',source:'landing-page'};
+      if(input.attribution && typeof input.attribution==='object')lead.attribution=attribution(input.attribution);
       const write=writes.then(async()=>{
         await mkdir(directory,{recursive:true});
         await appendFile(path.join(directory,'leads.jsonl'),JSON.stringify(lead)+'\n',{encoding:'utf8',mode:0o600});
