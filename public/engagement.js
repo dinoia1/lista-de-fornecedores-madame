@@ -4,16 +4,49 @@
   const previous=document.querySelector('[data-category-prev]');
   const next=document.querySelector('[data-category-next]');
   const reduced=matchMedia('(prefers-reduced-motion:reduce)');
-  function move(direction) { track.scrollBy({left:direction*track.clientWidth*.8,behavior:reduced.matches?'instant':'smooth'}); }
-  function updateNavigation() { previous.disabled=track.scrollLeft<=2; next.disabled=track.scrollLeft+track.clientWidth>=track.scrollWidth-2; }
+  const toggle=document.querySelector('[data-category-toggle]');
+  const originals=[...track.children];
+  originals.forEach(item=>{
+    const copy=item.cloneNode(true);
+    copy.setAttribute('aria-hidden','true');copy.dataset.loopCopy='true';
+    copy.querySelectorAll('a').forEach(link=>link.tabIndex=-1);
+    track.append(copy);
+  });
+  track.classList.add('is-looping');
+  let cycle=0,position=0,last=0,pauseUntil=0,hovered=false,dragging=false,visible=false;
+  let paused=reduced.matches;
+  function measure() {cycle=track.children[originals.length].getBoundingClientRect().left-track.firstElementChild.getBoundingClientRect().left;position=track.scrollLeft;}
+  function updateToggle() {toggle.textContent=paused?'▷':'Ⅱ';toggle.setAttribute('aria-label',paused?'Retomar carrossel':'Pausar carrossel');toggle.setAttribute('aria-pressed',String(paused));}
+  function move(direction) {
+    pauseUntil=performance.now()+3000;
+    let target=track.scrollLeft+direction*track.clientWidth*.65;
+    if(cycle>0)target=((target%cycle)+cycle)%cycle;
+    track.scrollLeft=target;position=track.scrollLeft;
+  }
   previous.addEventListener('click',()=>move(-1));
   next.addEventListener('click',()=>move(1));
-  track.addEventListener('scroll',updateNavigation,{passive:true});
-  window.addEventListener('resize',updateNavigation);
+  toggle.addEventListener('click',()=>{paused=!paused;updateToggle();});
+  reduced.addEventListener('change',()=>{paused=reduced.matches;updateToggle();});
+  track.addEventListener('mouseenter',()=>hovered=true);
+  track.addEventListener('mouseleave',()=>hovered=false);
+  track.addEventListener('pointerdown',()=>dragging=true);
+  const release=()=>{if(dragging){dragging=false;pauseUntil=performance.now()+3000;}};
+  window.addEventListener('pointerup',release);window.addEventListener('pointercancel',release);
+  track.addEventListener('wheel',()=>pauseUntil=performance.now()+3000,{passive:true});
+  window.addEventListener('resize',measure);
   track.addEventListener('keydown',event=>{
     if(event.target===track && ['ArrowLeft','ArrowRight'].includes(event.key)) { event.preventDefault(); move(event.key==='ArrowLeft'?-1:1); }
   });
-  updateNavigation();
+  new IntersectionObserver(entries=>visible=entries[0].isIntersecting).observe(track);
+  function animate(now) {
+    const elapsed=last?Math.min(now-last,50):0;last=now;
+    const focused=track.contains(document.activeElement);
+    if(visible&&!document.hidden&&!paused&&!hovered&&!dragging&&!focused&&now>=pauseUntil&&!document.querySelector('#lead-dialog').open&&cycle>0){
+      position=(position+elapsed*.036)%cycle;track.scrollLeft=position;
+    } else position=track.scrollLeft;
+    requestAnimationFrame(animate);
+  }
+  measure();updateToggle();requestAnimationFrame(animate);
 
   const dialog=document.querySelector('#lead-dialog');
   const form=document.querySelector('#lead-form');
@@ -33,7 +66,7 @@
   dialog.querySelector('.lead-close').addEventListener('click',()=>dialog.close());
   done.addEventListener('click',()=>dialog.close());
   document.querySelectorAll('[data-lead-open]').forEach(button=>button.addEventListener('click',open));
-  document.querySelectorAll('#explore-complete,.mobile-sticky a').forEach(link=>link.addEventListener('click',()=>{clearTimeout(automatic);remember();}));
+  document.querySelectorAll('#explore-complete,#intro-checkout,.mobile-sticky a').forEach(link=>link.addEventListener('click',()=>{clearTimeout(automatic);remember();}));
   let seen=false;try{seen=sessionStorage.getItem('madame-lead-seen')==='1';}catch{}
   if(!seen)automatic=setTimeout(()=>{if(!document.hidden)open();},12000);
   phone.addEventListener('input',()=>phone.setCustomValidity(''));

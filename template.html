@@ -9,13 +9,17 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%230b090b'/%3E%3Cpath d='M12 24 22 12h20l10 12-20 29Z' fill='none' stroke='%23e2bb75' stroke-width='4'/%3E%3Cpath d='m12 24 40 0M22 12l10 41 10-41' fill='none' stroke='%23eb168a' stroke-width='3'/%3E%3C/svg%3E">
   <link rel="preload" href="assets/hero.webp" as="image" fetchpriority="high">
 
-  <link rel="stylesheet" href="style.css?v=oferta-madame">
+  <link rel="stylesheet" href="style.css?v=acesso-mina">
   <script defer src="config.js?v=lastlink"></script>
-  <script defer src="app.js?v=leads-categorias"></script>
-  <script defer src="engagement.js?v=leads-categorias"></script>
+  <script defer src="app.js?v=acesso-mina"></script>
+  <script defer src="engagement.js?v=carrossel-3d"></script>
 </head>
 <body>
   <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+  <svg class="category-paints" xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true"><defs>
+    <linearGradient id="category-metal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3c4"/><stop offset=".32" stop-color="#f7d37f"/><stop offset=".58" stop-color="#bc761f"/><stop offset=".8" stop-color="#ffe9a6"/><stop offset="1" stop-color="#dfad52"/></linearGradient>
+    <linearGradient id="category-body" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8e561d"/><stop offset=".5" stop-color="#3d2113"/><stop offset="1" stop-color="#b67d2d"/></linearGradient>
+  </defs></svg>
   <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
     <symbol id="arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
     <symbol id="diamond" viewBox="0 0 24 24"><path d="m3 8 4-5h10l4 5-9 13Zm0 0h18M7 3l5 18 5-18"/></symbol>
@@ -41,7 +45,7 @@
 
     <section class="category-carousel" aria-labelledby="category-heading" aria-roledescription="carrossel">
       <div class="container">
-        <div class="category-heading"><h2 id="category-heading">Principais categorias <span>Encontre seu próximo garimpo.</span></h2><div class="category-navigation"><button type="button" data-category-prev aria-label="Categorias anteriores" aria-controls="category-track"><svg aria-hidden="true"><use href="#arrow"/></svg></button><button type="button" data-category-next aria-label="Próximas categorias" aria-controls="category-track"><svg aria-hidden="true"><use href="#arrow"/></svg></button></div></div>
+        <div class="category-heading"><h2 id="category-heading">Principais categorias <span>Encontre seu próximo garimpo.</span></h2><div class="category-navigation"><button type="button" data-category-toggle aria-label="Pausar carrossel" aria-pressed="false" aria-controls="category-track">Ⅱ</button><button type="button" data-category-prev aria-label="Categorias anteriores" aria-controls="category-track"><svg aria-hidden="true"><use href="#arrow"/></svg></button><button type="button" data-category-next aria-label="Próximas categorias" aria-controls="category-track"><svg aria-hidden="true"><use href="#arrow"/></svg></button></div></div>
         <ul class="category-track" id="category-track" tabindex="0" aria-label="Categorias de fornecedores">
           <!-- CATEGORY_ITEMS -->
         </ul>
@@ -51,8 +55,22 @@
     <section class="intro-section section" id="o-produto">
       <h1 class="sr-only">Lista de Fornecedores Madame</h1>
       <div class="container intro-grid">
-        <div class="reveal"><p class="eyebrow gold">01 / UM NOVO PONTO DE PARTIDA</p><h2>Uma boa escolha<br>começa por saber<br><em>onde procurar.</em></h2></div>
-        <div class="intro-copy reveal"><p class="large-copy">Já tem uma ideia do que vender?<br>Encontre caminhos para pesquisar<br>quem pode fornecer.</p><p>Contatos soltos, abas abertas e informações espalhadas tornam a pesquisa mais trabalhosa. A coleção reúne 20 listas por assunto para você organizar a busca, conhecer opções e iniciar suas cotações.</p><div class="intro-points"><span><svg><use href="#layers"/></svg> Explore seu segmento</span><span><svg><use href="#link"/></svg> Consulte as informações</span><span><svg><use href="#check"/></svg> Negocie com o fornecedor</span></div></div>
+        <div class="reveal"><p class="eyebrow gold intro-access-label">01 Você terá acesso</p><h2>A maior e mais completa lista de <em>fornecedores do Brasil!</em></h2></div>
+        <div class="intro-copy reveal">
+          <p>Durante anos, muitos desses contatos ficaram longe dos olhos do público. Foram fornecedores, distribuidores, importadores e oportunidades que ajudaram a construir o caminho da Madame no varejo.</p>
+          <p>Agora, pela primeira vez, essa mina foi aberta.</p>
+          <p>Um lugar onde estão reunidos contatos que normalmente você levaria meses ou até anos para encontrar sozinho. Uma seleção guardada, organizada e separada para você entrar, explorar e descobrir de onde podem vir os produtos por trás de grandes margens no varejo.</p>
+          <p class="intro-highlight"><strong>É como receber o mapa de uma mina que já foi garimpada antes de você chegar.</strong></p>
+          <ul class="intro-points">
+            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Listas digitais separadas por nicho e segmento</span></li>
+            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Contatos e informações organizados em um só lugar</span></li>
+            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Catálogos e fornecedores para diferentes tipos de produtos</span></li>
+            <li><svg aria-hidden="true"><use href="#check"/></svg><span>Acesso rápido para explorar novas oportunidades de negócio</span></li>
+            <li><svg aria-hidden="true"><use href="#check"/></svg><span><strong>20 listas digitais dentro de uma única coleção</strong></span></li>
+          </ul>
+          <a class="button button-pink intro-access-button" id="intro-checkout" href="#colecao">Quero acessar a Mina de Fornecedores <svg aria-hidden="true"><use href="#arrow"/></svg></a>
+          <p class="intro-access-note"><em>Você não está comprando apenas uma lista. Está recebendo acesso a anos de garimpo, pesquisa e contatos reunidos em um único lugar.</em></p>
+        </div>
       </div>
     </section>
 

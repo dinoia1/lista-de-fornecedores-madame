@@ -24,6 +24,6 @@ const categoryIcons={
   '05':'<ellipse cx="5" cy="10" rx="2" ry="3"/><ellipse cx="10" cy="5" rx="2" ry="3"/><ellipse cx="16" cy="5" rx="2" ry="3"/><ellipse cx="21" cy="11" rx="2" ry="3"/><path d="M8 14c2-4 6-4 8 0l3 4c1 4-3 4-6 2-3 2-7 2-6-2Z"/>',
   '06':'<path d="M14 6a6 6 0 0 0-7 7l-5 5a2 2 0 0 0 4 4l5-5a6 6 0 0 0 7-7l-4 3-3-3Z"/>'
 };
-html=html.replace('<!-- CATEGORY_ITEMS -->',categories.map(item=>`<li><a class="category-item" href="#colecao"><svg class="category-icon" viewBox="0 0 24 24" aria-hidden="true">${categoryIcons[item.id]}</svg><span>${escape(item.id==='15'?'Moda feminina':item.name)}</span></a></li>`).join('\n'));
+html=html.replace('<!-- CATEGORY_ITEMS -->',categories.map(item=>`<li><a class="category-item" href="#colecao"><span class="category-icon-stage" aria-hidden="true"><svg class="category-icon" viewBox="-3 -3 31 31"><g class="category-icon-depth" transform="translate(1.2 1.8)">${categoryIcons[item.id]}</g><g class="category-icon-face">${categoryIcons[item.id]}</g></svg></span><span class="category-name">${escape(item.id==='15'?'Moda feminina':item.name)}</span></a></li>`).join('\n'));
 await writeFile(new URL('../public/index.html',import.meta.url),html);
 console.log('Built public/index.html with 12 category slides and the collection offer.');

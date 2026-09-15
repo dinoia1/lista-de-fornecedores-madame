@@ -32,6 +32,7 @@
   let checkout = null;
   if(config.checkoutUrl) { try { const url = new URL(config.checkoutUrl); if(url.protocol === 'https:' && !url.username && !url.password)checkout = url.href; } catch {} }
   if(checkout) {
+    $('#intro-checkout').href = checkout;
     document.querySelectorAll('#explore-complete, .mobile-sticky a').forEach(offer => {
       offer.href = checkout;
       offer.firstChild.textContent = (config.purchaseLabel || 'Comprar agora') + ' ';
