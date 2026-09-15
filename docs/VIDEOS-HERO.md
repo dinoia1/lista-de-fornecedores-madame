@@ -9,7 +9,7 @@ O hero inicial usa os dois arquivos enviados pelo usuário em 14/09/2026:
 
 Os vídeos foram copiados integralmente, sem recompressão, com aproximadamente 6,1 MB cada. Somente a versão correspondente ao tamanho atual da tela é carregada. A abertura mostra apenas o vídeo, desde o topo, com enquadramento completo: 16:9 desktop e 9:16 mobile. Um degradê inferior sobe suavemente e une o vídeo à segunda dobra.
 
-Reprodução automática sem som, em repetição. O botão de pausa/retomada fica na segunda dobra, fora do vídeo. Ao sair do hero ou ocultar a aba, o vídeo pausa. Com preferência por movimento reduzido, não há download/reprodução automática; o usuário pode iniciar pelo botão. Sem JavaScript, falha de mídia ou bloqueio de autoplay, a imagem de fundo permanece disponível.
+Reprodução automática sem som, em repetição. O botão de pausa/retomada foi removido a pedido do usuário. Ao sair do hero ou ocultar a aba, o vídeo pausa. Com preferência por movimento reduzido, não há download/reprodução automática e a imagem estática permanece. Sem JavaScript, falha de mídia ou bloqueio de autoplay, a imagem de fundo permanece disponível.
 
 Retirados do hero: cabeçalho, navegação, textos, CTA, selo de 20 listas, legenda e controle sobreposto. A faixa de categorias foi retirada para permitir a transição direta à segunda dobra. O CTA fixo mobile só aparece depois de sair do hero. A contagem de 956 cadastros foi deslocada para a oferta. Verificação desta revisão: `output/playwright/clean-hero-check.txt`, em 320, 390, 768 e 1440 px, sem erros JavaScript nem transbordamento horizontal.
 

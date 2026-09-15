@@ -1,21 +1,11 @@
 (() => {
   'use strict';
   const $ = (selector) => document.querySelector(selector);
-  const motion = $('#video-control');
   const video = $('#hero-video');
   const mobileVideo = matchMedia('(max-width:760px)');
   const reducedMotion = matchMedia('(prefers-reduced-motion:reduce)');
   let wantsPlayback = !reducedMotion.matches;
   let inView = true;
-  function updateVideoButton() {
-    const playing = !video.paused && !video.ended;
-    const label = playing ? 'Pausar vídeo' : 'Reproduzir vídeo';
-    motion.setAttribute('aria-label',label);
-    motion.setAttribute('aria-pressed',String(playing));
-    motion.title = label;
-    motion.querySelector('.video-control-label').textContent = label;
-    motion.firstElementChild.textContent = playing ? 'Ⅱ' : '▷';
-  }
   function selectVideo() {
     const source = mobileVideo.matches ? video.dataset.mobile : video.dataset.desktop;
     if(video.getAttribute('src') !== source) {
@@ -28,13 +18,11 @@
     if(wantsPlayback && inView && !document.hidden) {
       selectVideo();
       video.muted = true;
-      video.play().catch(updateVideoButton);
+      video.play().catch(() => video.classList.remove('is-ready'));
     } else video.pause();
   }
-  video.addEventListener('playing',() => { video.classList.add('is-ready'); updateVideoButton(); });
-  video.addEventListener('pause',updateVideoButton);
-  video.addEventListener('error',() => { video.classList.remove('is-ready'); updateVideoButton(); });
-  motion.addEventListener('click',() => { wantsPlayback = video.paused; syncVideo(); });
+  video.addEventListener('playing',() => video.classList.add('is-ready'));
+  video.addEventListener('error',() => video.classList.remove('is-ready'));
   mobileVideo.addEventListener('change',() => { if(video.hasAttribute('src'))selectVideo(); syncVideo(); });
   reducedMotion.addEventListener('change',() => { wantsPlayback = !reducedMotion.matches; syncVideo(); });
   document.addEventListener('visibilitychange',syncVideo);
