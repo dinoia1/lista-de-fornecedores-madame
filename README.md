@@ -52,6 +52,7 @@ A compra é encaminhada ao checkout Lastlink. A LP recebe leads no servidor, mas
 
 ## Arquivos entregues
 
+- `LEIA-ME-DEV.md`: guia de entrega ao desenvolvedor, execução, publicação, checkout e operação de leads.
 - `public/`: site completo pronto para hospedagem estática; todas as imagens incluídas.
 - `server.mjs`: servidor local sem dependências.
 - `docs/`: fontes dos materiais, decisões e relatório de verificação.
