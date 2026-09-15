@@ -21,6 +21,7 @@ Abra http://localhost:4173. Não é necessário instalar pacotes. O servidor ser
 - Visual e responsividade: `public/style.css`.
 - Interações: `public/app.js`.
 - Imagens: `public/assets/`. Mantenha os nomes ou ajuste suas referências.
+- Mockup da seção “Por dentro”: `public/assets/mockup-plataforma-madame.png`, imagem original fornecida pelo proprietário, à esquerda do texto no desktop e acima dele no celular.
 - Vídeos do hero: `public/assets/hero-desktop.mp4` (16:9) e `hero-mobile.mp4` (9:16). Seleção automática por tamanho de tela; detalhes em `docs/VIDEOS-HERO.md`.
 - Preço, parcelamento, garantia, prazo de acesso, atualização e checkout: `public/config.js`.
 

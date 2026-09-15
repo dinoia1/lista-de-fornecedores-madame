@@ -10,7 +10,7 @@ for(const match of html.matchAll(/(?:src|href)="([^"#]+)"/g)){
   assert.ok((await stat(new URL('public/'+match[1],root))).isFile(),match[1]);
 }
 for(const match of html.matchAll(/href="#([^"]+)"/g))assert.ok(html.includes(`id="${match[1]}"`),match[1]);
-for(const filename of await readdir(new URL('public/assets/',root)))assert.ok(/\.(webp|woff2|svg|mp4)$/.test(filename));
+for(const filename of await readdir(new URL('public/assets/',root)))assert.ok(/\.(webp|png|woff2|svg|mp4)$/.test(filename));
 assert.ok(!/drive\.google|wa\.me|usercontent|\.pdf["']|\+55\d/.test(html),'No paid contacts or PDF links');
 assert.ok(catalog.find(c=>c.id==='14').description.includes('moda infantil'));
 console.log('PASS: 20 source lists, removed sections, local dependencies, anchors, FIT description and no paid PDF/contact links.');

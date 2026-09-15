@@ -9,7 +9,7 @@ const root=path.join(path.dirname(fileURLToPath(import.meta.url)), 'public');
 const handleLead=createLeadHandler(process.env.LEADS_DIR || path.join(root,'..','data'));
 const handleAdmin=createAdminHandler(process.env.LEADS_DIR || path.join(root,'..','data'));
 await handleAdmin.initialize();
-const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2','.mp4':'video/mp4'};
+const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.webp':'image/webp','.png':'image/png','.svg':'image/svg+xml','.woff2':'font/woff2','.mp4':'video/mp4'};
 const server=http.createServer(async(req,res)=>{
   const route=req.url.split('?')[0];
   if(route.startsWith('/api/admin/') || route==='/api/track') {await handleAdmin(req,res);return;}
