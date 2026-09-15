@@ -30,3 +30,20 @@
 @media(max-width:1050px) and (min-width:761px){.hero-branding-logo{max-width:303.75px;margin-bottom:16.2px}.hero-branding-subtitle{margin-top:16.2px;padding-left:20px}.hero-branding{bottom:12%}}
 @media(max-width:760px){.hero-branding{display:block;left:50%;bottom:max(10%,env(safe-area-inset-bottom));width:calc(100% - 48px);max-width:340px;transform:translateX(-50%);text-align:center}.hero-branding-logo{width:100%;max-width:280px;margin:0 auto 14px}.hero-branding-subtitle{font-size:clamp(14px,3.8vw,17px);line-height:1.55;margin-top:14px;padding-left:0}.hero-branding::before{inset:-24px -40px;background:radial-gradient(ellipse at center,rgba(11,9,11,.85),rgba(11,9,11,.5) 48%,transparent 75%)}}
 @media(max-width:760px){.hero{aspect-ratio:auto;height:100vh;height:100dvh;min-height:0}.hero-media video,.hero-media>img{object-fit:cover;object-position:center}.hero-shade{height:18%}.intro-section{padding-top:20px}}
+/* Collection offer follows the user's dark, rounded two-column reference. */
+.collection-card{max-width:1000px;margin-inline:auto;grid-template-columns:1.16fr 1fr;gap:32px;padding:42px;border:4px solid #272727;border-radius:38px;background:#171717;box-shadow:none;color:#f5f5f5}
+.collection-benefits{list-style:none;margin:0;padding:0;display:grid;align-content:start;gap:17px;color:#aaa;font-size:16px;line-height:1.5}
+.collection-benefits li{display:flex;align-items:center;gap:14px;min-height:25px}
+.collection-benefits svg{width:25px;height:25px;padding:6px;border-radius:50%;background:#e5e5e5;color:#171717;stroke-width:1.8}
+.collection-offer{min-width:0;align-self:stretch;border-left:1px solid #292929;border-top:0;padding:0 0 0 32px;display:flex;flex-direction:column}
+.collection-card h2{font:700 26px/1.2 Arial,Helvetica,sans-serif;letter-spacing:-.025em;margin:3px 0 12px}
+.collection-description{font-size:16px;line-height:1.6;color:#aaa}
+.collection-offer .offer-number{font:600 76px/1 Arial,Helvetica,sans-serif;letter-spacing:-.055em;gap:10px;align-items:baseline;margin:32px 0 8px;color:#fafafa}
+.collection-offer .offer-number span{font:400 19px/1.4 Arial,Helvetica,sans-serif;letter-spacing:-.02em;color:#a8a8a8}
+.collection-count{font-size:14px;line-height:1.5;color:#a8a8a8}
+.collection-offer .collection-buy{background:#fafafa;color:#181818;box-shadow:0 1px 2px #ffffff inset;border:1px solid #dedede;border-radius:14px;min-height:50px;padding:11px 18px;margin-top:28px;gap:10px;font-size:16px;font-weight:600}
+.collection-offer .collection-buy:hover{background:#e8e8e8;box-shadow:none}
+.collection-buy svg{width:18px;height:18px;transform:rotate(-45deg)}
+.collection-disclaimer{max-width:1000px;margin:28px auto 0;text-align:center;font-size:13px;line-height:1.8;color:#a8a8a8}
+@media(max-width:1050px) and (min-width:761px){.collection-card{padding:32px;gap:24px}.collection-offer{padding-left:24px}.collection-benefits{font-size:14px;gap:15px}.collection-description{font-size:14px}.collection-offer .offer-number span{font-size:16px}}
+@media(max-width:760px){.collection-card{grid-template-columns:1fr;padding:28px 24px;gap:28px;border-radius:28px;border-width:3px}.collection-benefits{font-size:14px;gap:15px}.collection-benefits li{gap:12px}.collection-benefits svg{width:23px;height:23px;padding:5px}.collection-offer{border-left:0;border-top:1px solid #303030;padding:26px 0 0}.collection-card h2{font-size:25px}.collection-description{font-size:15px}.collection-offer .offer-number{font-size:72px;margin-top:26px}.collection-offer .offer-number span{font-size:18px}.collection-count{font-size:13px}.collection-offer .collection-buy{font-size:15px;margin-top:24px}.collection-disclaimer{font-size:11px;margin-top:20px}}
