@@ -62,4 +62,4 @@ Os scripts Python são registros opcionais da importação inicial, não são ne
 
 Os PDFs completos, links privados de fornecedores e dados de compradores não estão incluídos no site nem no pacote.
 
-As capturas em `output/`, arquivos ZIP, logs e configurações locais estão excluídos do Git pelo `.gitignore`. Os vídeos e as capas necessários para executar o site são versionados. Validação da revisão atual: build e checagem estática aprovados; composição do hero conferida em 1440, 1024, 768 e 390 px, sem erros JavaScript ou transbordamento horizontal. O celular mantém somente o vídeo na primeira dobra.
+As capturas em `output/`, arquivos ZIP, logs e configurações locais estão excluídos do Git pelo `.gitignore`. Os vídeos e as capas necessários para executar o site são versionados. Validação da revisão atual: build e checagem estática aprovados; composição do hero conferida em 1440, 1024, 768, 430, 390 e 320 px, sem erros JavaScript ou transbordamento horizontal. No celular, a logo e o subtítulo ficam na parte inferior do vídeo, dentro da primeira dobra.
