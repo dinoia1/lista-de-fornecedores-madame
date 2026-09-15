@@ -16,6 +16,7 @@ npm.cmd run build
 npm.cmd run check
 npm.cmd run test:leads
 npm.cmd run test:admin
+npm.cmd run test:qualification
 npm.cmd start
 ```
 
@@ -64,6 +65,8 @@ As condições foram fornecidas pelo proprietário na referência visual:
 - R$ 197,00 à vista ou 12x de R$ 20,98.
 - Acesso vitalício.
 - Valores de referência: R$ 297,00, R$ 197,00, R$ 97,00, R$ 147,00, R$ 97,00, R$ 197,00 e R$ 97,00. Total: R$ 1.129,00.
+- Ancoragem comercial da coleção atualizada pelo proprietário: de R$ 997,00 por R$ 197,00 à vista. Esse preço de referência é independente da soma dos valores demonstrativos dos itens.
+- Formulário em três etapas: faixa de faturamento mensal, opção PF/PJ e dados de contato. A oferta aparece no popup, e o botão de checkout é revelado após salvar. Configuração em `leadIncentive`; não há cupom adicional. Abra `/#cadastro` para visualizar o formulário diretamente.
 
 Esses valores são apresentados pela LP; a cobrança efetiva é responsabilidade da configuração na Lastlink. O parcelamento soma R$ 251,76. Confira a correspondência com o checkout antes de publicar alterações comerciais. A LP não simula nem confirma pagamentos.
 
@@ -105,7 +108,7 @@ O armazenamento JSONL é apropriado para uma instância. Para múltiplas instân
 
 Antes de entregar uma alteração:
 
-1. Execute build, check, test:leads e test:admin.
+1. Execute build, check, test:leads, test:admin e test:qualification.
 2. Confira o desktop e celulares de 320 e 390 px, o vídeo e o carrossel.
 3. Confira os links da Lastlink sem concluir uma compra.
 4. Teste o formulário com dados fictícios em um diretório separado usando `LEADS_DIR`.

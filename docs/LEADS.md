@@ -1,6 +1,10 @@
 # Captação de leads
 
-O popup solicita nome, telefone brasileiro com DDD e e-mail, com autorização explícita para contato. Abre automaticamente após 12 segundos, uma vez por sessão de navegação, e pode ser reaberto por “Receber informações”, na oferta. Fechar ou pressionar Esc mantém a navegação disponível. A compra na Lastlink continua independente do formulário.
+O popup apresenta três etapas: faturamento mensal, perfil PF (CPF) ou PJ (CNPJ), e nome/telefone/e-mail com autorização para contato. Não pede número do documento. Abre automaticamente após 12 segundos, uma vez por sessão de navegação, e pode ser reaberto por “Receber informações”, na oferta. Voltar e reabrir preservam as respostas enquanto a página estiver aberta. Fechar ou pressionar Esc mantém a navegação disponível. A compra na Lastlink continua independente do formulário.
+
+As faixas são segmentação comercial interna, não enquadramento legal/fiscal: sem faturamento → Começando; até R$ 10 mil/mês → Pequeno; acima de R$ 10 mil até R$ 100 mil/mês → Médio; acima de R$ 100 mil/mês → Grande. O backend valida as opções e calcula o porte, sem aceitar um rótulo enviado pelo navegador. A versão de consentimento para esse formulário é `contact-profile-v1`. As respostas só são enviadas ao concluir a terceira etapa. Cadastros anteriores continuam acessíveis sem qualificação inventada.
+
+Condição aprovada pelo proprietário: ancoragem de R$ 997 por R$ 197 à vista. `public/config.js`, campo `leadIncentive`, controla a apresentação; o botão para Lastlink é revelado depois que o cadastro é salvo. Não há cupom, escassez, desconto adicional ou preço individual por faturamento. Os CTAs já existentes continuam disponíveis. O valor cobrado depende do checkout. `referenceTotal` é a ancoragem comercial da coleção; os valores individuais da demonstração continuam somando R$ 1.129 e não definem esse preço de referência.
 
 O servidor recebe `POST /api/leads` e só confirma sucesso depois de salvar. Os registros ficam em `data/leads.jsonl`, um objeto JSON por linha, com identificador, data UTC, nome, telefone normalizado, e-mail e versão da autorização (`contact-v1`). A pasta é criada no primeiro cadastro. Não há endpoint público para consultar leads. O conteúdo de `data/` está excluído do Git e do ZIP de entrega.
 

@@ -42,6 +42,14 @@ export function createLeadHandler(directory) {
         reply(400,'Confira nome, telefone, e-mail e a autorização para contato.'); return;
       }
       const lead={id:randomUUID(),createdAt:new Date().toISOString(),name,phone:'+55'+phone,email,consent:true,consentVersion:'contact-v1',source:'landing-page'};
+      if(input.qualification !== undefined) {
+        const bands={starting:['Ainda não faturo','Começando'],'up-to-10k':['Até R$ 10 mil/mês','Pequeno'],'10k-to-100k':['Acima de R$ 10 mil até R$ 100 mil/mês','Médio'],'above-100k':['Acima de R$ 100 mil/mês','Grande']};
+        const profile=input.qualification;
+        if(!profile || typeof profile!=='object' || !Object.hasOwn(bands,profile.revenueRange) || !['pf','pj'].includes(profile.personType)) {reply(400,'Selecione a faixa de faturamento e o perfil de compra.');return;}
+        const [revenueLabel,businessSize]=bands[profile.revenueRange];
+        lead.qualification={version:1,revenueRange:profile.revenueRange,revenueLabel,businessSize,personType:profile.personType};
+        lead.consentVersion='contact-profile-v1';
+      }
       if(input.attribution && typeof input.attribution==='object')lead.attribution=attribution(input.attribution);
       const write=writes.then(async()=>{
         await mkdir(directory,{recursive:true});

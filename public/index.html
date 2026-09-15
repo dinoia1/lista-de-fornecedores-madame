@@ -158,18 +158,40 @@
     <button type="button" class="lead-close" aria-label="Fechar cadastro">×</button>
     <img class="lead-logo" src="assets/logo.webp" width="650" height="217" alt="Garimpo da Madame" loading="lazy">
     <p class="eyebrow gold">SEU PRÓXIMO GARIMPO</p>
-    <h2 id="lead-title">Vamos conversar?</h2>
-    <p id="lead-description">Deixe seu contato para receber informações sobre a coleção de fornecedores.</p>
-    <form id="lead-form" method="post" action="/api/leads">
+    <h2 id="lead-title">Seu próximo passo começa aqui.</h2>
+    <p id="lead-description">Conte sobre seu negócio para receber informações e consultar as condições da coleção.</p>
+    <div class="lead-offer" hidden><span>COLEÇÃO COMPLETA</span><p>De <s id="lead-offer-reference"></s> por <strong id="lead-offer-price"></strong><small>à vista</small></p></div>
+    <ol class="lead-progress" aria-label="Etapas do cadastro"><li aria-current="step"><span>1</span> Seu negócio</li><li><span>2</span> Seu perfil</li><li><span>3</span> Seu contato</li></ol>
+    <p class="lead-step-counter" id="lead-step-counter" aria-live="polite">Etapa 1 de 3</p>
+    <form id="lead-form" method="post" action="/api/leads" novalidate>
+      <fieldset class="lead-step" data-lead-step="0">
+        <legend>Qual é o faturamento mensal do seu negócio?</legend>
+        <p class="lead-step-hint">Escolha a faixa que mais se aproxima do seu momento.</p>
+        <label class="lead-choice"><input type="radio" name="revenueRange" value="starting" required><span><strong>Ainda estou começando</strong><small>Não tenho faturamento no momento</small></span></label>
+        <label class="lead-choice"><input type="radio" name="revenueRange" value="up-to-10k" required><span><strong>Até R$ 10 mil por mês</strong><small>Estou construindo meu negócio</small></span></label>
+        <label class="lead-choice"><input type="radio" name="revenueRange" value="10k-to-100k" required><span><strong>Acima de R$ 10 mil até R$ 100 mil</strong><small>Quero explorar novas oportunidades</small></span></label>
+        <label class="lead-choice"><input type="radio" name="revenueRange" value="above-100k" required><span><strong>Acima de R$ 100 mil por mês</strong><small>Busco ampliar minhas fontes</small></span></label>
+      </fieldset>
+      <fieldset class="lead-step" data-lead-step="1" hidden disabled>
+        <legend>Como você pretende comprar?</legend>
+        <p class="lead-step-hint">Selecione seu perfil. Não precisamos do número do documento.</p>
+        <label class="lead-choice"><input type="radio" name="personType" value="pf" required><span><strong>Pessoa física · CPF</strong><small>Vou comprar como pessoa física</small></span></label>
+        <label class="lead-choice"><input type="radio" name="personType" value="pj" required><span><strong>Pessoa jurídica · CNPJ</strong><small>Vou comprar pela minha empresa</small></span></label>
+      </fieldset>
+      <fieldset class="lead-step" data-lead-step="2" hidden disabled>
+      <legend>Por último, onde podemos falar com você?</legend>
+      <p class="lead-step-hint">Deixe seu contato para concluir o cadastro.</p>
       <label for="lead-name">Nome<input id="lead-name" name="name" autocomplete="name" required minlength="2" maxlength="100" placeholder="Seu nome"></label>
       <label for="lead-phone">Telefone com DDD<input id="lead-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="22" placeholder="(11) 99999-9999"></label>
       <label for="lead-email">E-mail<input id="lead-email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="voce@exemplo.com"></label>
       <div class="lead-honeypot" aria-hidden="true"><label>Site<input name="website" tabindex="-1" autocomplete="off"></label></div>
       <label class="lead-consent"><input type="checkbox" name="consent" required><span>Autorizo a Garimpo da Madame a entrar em contato por telefone ou e-mail sobre esta coleção.</span></label>
-      <p class="lead-privacy">Usaremos estes dados para responder ao seu interesse e associar seu cadastro à origem e campanha de acesso. Você pode pedir a exclusão dos dados ao receber nosso contato.</p>
-      <button class="button button-pink lead-submit" type="submit">Quero receber informações <svg aria-hidden="true"><use href="#arrow"/></svg></button>
+      <p class="lead-privacy">Usaremos seu contato, faixa de faturamento e perfil de compra para atender seu interesse e associar o cadastro à campanha de acesso. Você pode pedir a exclusão ao receber nosso contato.</p>
+      </fieldset>
+      <div class="lead-step-actions"><button type="button" class="lead-back" hidden>← Voltar</button><button class="button button-pink lead-submit" type="submit"><span>Continuar</span><svg aria-hidden="true"><use href="#arrow"/></svg></button></div>
     </form>
     <p class="lead-status" id="lead-status" role="status" aria-live="polite"></p>
+    <div class="lead-incentive" hidden><strong id="lead-incentive-title"></strong><p id="lead-incentive-description"></p><p id="lead-incentive-code" hidden></p><a class="button button-pink" id="lead-incentive-link" hidden>Ir para o checkout →</a></div>
     <button type="button" class="lead-done" hidden>Voltar ao site</button>
   </dialog>
 </body>

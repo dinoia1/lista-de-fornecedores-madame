@@ -52,6 +52,8 @@ A compra é encaminhada ao checkout Lastlink. Acesse `/admin` para consultar e e
 
 ## Arquivos entregues
 
+O formulário de captura tem três etapas: faturamento mensal, perfil PF/PJ e contato. O painel inclui porte comercial, faixa de faturamento e perfil na busca e exportação. A ancoragem comercial aprovada é de R$ 997 por R$ 197 à vista; ajuste `leadIncentive` em `public/config.js`. Veja `docs/LEADS.md`. Para abrir o popup diretamente, acesse `/#cadastro`.
+
 - `LEIA-ME-DEV.md`: guia de entrega ao desenvolvedor, execução, publicação, checkout e operação de leads.
 - `public/`: site completo pronto para hospedagem estática; todas as imagens incluídas.
 - `server.mjs`: servidor local sem dependências.

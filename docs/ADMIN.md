@@ -2,6 +2,8 @@
 
 Abra `/admin` no mesmo servidor da landing page. O painel permite consultar os leads existentes, buscar nome/e-mail/telefone, filtrar período/origem/campanha, exportar CSV e acompanhar sessões, visualizações, cliques no checkout e conversão em lead.
 
+Os contatos do formulário em três etapas incluem faixa de faturamento, porte comercial e perfil PF/PJ na tabela e no CSV. Os filtros de porte e perfil afetam somente a lista e a exportação, mantendo as métricas de tráfego do período. As faixas de porte são uma segmentação comercial interna, documentada em `LEADS.md`, sem equivalência fiscal.
+
 ## Primeiro acesso
 
 Na primeira inicialização, o servidor cria `data/admin-auth.json` com uma senha aleatória armazenada como hash scrypt com salt. A senha inicial fica somente no arquivo local `data/admin-first-access.txt`. Abra esse arquivo na máquina do servidor, entre no painel e use **Trocar senha**. A troca remove o arquivo de primeiro acesso e encerra todas as sessões.
@@ -44,4 +46,4 @@ Esta implementação roda em um único processo Node com disco persistente. Escr
 
 `POST /api/admin/login`, `GET /api/admin/session`, `POST /api/admin/logout`, `POST /api/admin/password`, `GET /api/admin/dashboard`, `GET /api/admin/export`. Somente login é público; demais rotas exigem sessão. Coleta pública: `POST /api/track` e `POST /api/leads`.
 
-Validação: `npm run build`, `npm run check`, `npm run test:leads`, `npm run test:admin`. Testes usam diretórios temporários e dados fictícios; não alteram os leads reais.
+Validação: `npm run build`, `npm run check`, `npm run test:leads`, `npm run test:admin`, `npm run test:qualification`. Testes usam diretórios temporários e dados fictícios; não alteram os leads reais.

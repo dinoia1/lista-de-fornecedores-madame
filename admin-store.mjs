@@ -66,6 +66,8 @@ export function createAdminHandler(directory, options = {}) {
     const query = (url.searchParams.get('q') || '').slice(0,120).toLowerCase();
     const source = (url.searchParams.get('source') || '').slice(0,120);
     const campaign = (url.searchParams.get('campaign') || '').slice(0,120);
+    const businessSize=(url.searchParams.get('businessSize') || '').slice(0,40);
+    const personType=(url.searchParams.get('personType') || '').slice(0,10);
     const sources = new Map(), campaigns = new Map(), daily = new Map(), devices = new Map();
     const visitors = new Set(), converted = new Set(); const leads=[];
     const availableSources = new Set(), availableCampaigns = new Set();
@@ -88,6 +90,7 @@ export function createAdminHandler(directory, options = {}) {
       const ctx=context(record);if(!ctx)return;
       totalLeads++; ctx.groups.forEach(g=>g.leads++);
       if(ctx.a.sessionId) converted.add(ctx.a.sessionId);else unattributed++;
+      if(businessSize && record.qualification?.businessSize!==businessSize || personType && record.qualification?.personType!==personType)return;
       if(!query || [record.name,record.email,record.phone].some(v=>String(v).toLowerCase().includes(query)))leads.push({...record,attribution:ctx.a});
     });
     leads.sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
@@ -145,7 +148,7 @@ export function createAdminHandler(directory, options = {}) {
         const exporting=route.endsWith('/export');const data=await dashboard(url,exporting);
         if(!exporting){json(res,200,data);return;}
         const cell=value=>'"'+String(value??'').replace(/^[=+@\-\t\r\n]/,"'$&").replace(/"/g,'""')+'"';
-        const csv=[['Data','Nome','Telefone','E-mail','Origem','Mídia','Campanha','Dispositivo'],...data.leads.map(l=>[l.createdAt,l.name,l.phone,l.email,l.attribution.source,l.attribution.medium,l.attribution.campaign,l.attribution.device])].map(row=>row.map(cell).join(';')).join('\r\n');
+        const csv=[['Data','Nome','Telefone','E-mail','Origem','Mídia','Campanha','Dispositivo','Porte comercial','Faturamento mensal','Pessoa física/jurídica'],...data.leads.map(l=>[l.createdAt,l.name,l.phone,l.email,l.attribution.source,l.attribution.medium,l.attribution.campaign,l.attribution.device,l.qualification?.businessSize,l.qualification?.revenueLabel,l.qualification?.personType==='pf'?'Pessoa física (CPF)':l.qualification?.personType==='pj'?'Pessoa jurídica (CNPJ)':'Não informado'])].map(row=>row.map(cell).join(';')).join('\r\n');
         await audit('leads-export');res.writeHead(200,{'Content-Type':'text/csv; charset=utf-8','Content-Disposition':'attachment; filename="leads-madame.csv"','Cache-Control':'no-store'});res.end('\ufeff'+csv);return;
       }
       json(res,404,{error:'Rota não encontrada.'});

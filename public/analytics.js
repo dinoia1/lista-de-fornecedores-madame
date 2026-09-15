@@ -14,7 +14,7 @@
   }
   track('pageview');
   document.addEventListener('click',event=>{
-    const link=event.target.closest('#explore-complete,#intro-checkout,.mobile-sticky a');
+    const link=event.target.closest('#explore-complete,#intro-checkout,.mobile-sticky a,#lead-incentive-link');
     if(link && link.href.startsWith('https://lastlink.com/'))track('checkout');
   });
 })();

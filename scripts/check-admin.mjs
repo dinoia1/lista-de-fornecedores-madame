@@ -32,7 +32,7 @@ try {
   await post('/api/track',{...event,id:randomUUID()});
   await post('/api/track',{...event,id:randomUUID(),type:'checkout'});
   assert.equal((await post('/api/track',{...event,id:randomUUID(),type:'purchase'})).status,400);
-  const lead={name:'=Teste de fórmula',email:'teste@example.com',phone:'11999990000',consent:true,attribution};
+  const lead={name:'=Teste de fórmula',email:'teste@example.com',phone:'11999990000',consent:true,attribution,qualification:{revenueRange:'10k-to-100k',personType:'pj'}};
   assert.equal((await post('/api/leads',lead)).status,201);
   await appendFile(path.join(directory,'leads.jsonl'),JSON.stringify({id:randomUUID(),createdAt:new Date().toISOString(),name:'Cadastro anterior',email:'anterior@example.com',phone:'+5511999991111',consent:true})+'\n');
   data=await (await get('/api/admin/dashboard',cookie)).json();
@@ -41,6 +41,8 @@ try {
   assert.equal(data.leads.find(l=>l.email===lead.email).attribution.referrer,'instagram.com');
   data=await (await get('/api/admin/dashboard?source=instagram&campaign=lancamento&q=teste',cookie)).json();
   assert.equal(data.matched,1);assert.equal(data.totalLeads,1);
+  const qualified=await (await get('/api/admin/dashboard?businessSize=M%C3%A9dio&personType=pj',cookie)).json();assert.equal(qualified.matched,1);assert.equal(qualified.leads[0].qualification.revenueRange,'10k-to-100k');
+  const unmatched=await (await get('/api/admin/dashboard?businessSize=Grande',cookie)).json();assert.equal(unmatched.matched,0);assert.equal(unmatched.totalLeads,2);
   const csv=await get('/api/admin/export?q=teste',cookie);assert.equal(csv.status,200);assert.match(await csv.text(),/"'=Teste de fórmula"/);
   assert.equal((await get('/api/admin/dashboard?from=2020-01-01&to=2026-12-31',cookie)).status,400);
   const traffic=await readFile(path.join(directory,'traffic.jsonl'),'utf8');assert.ok(!traffic.includes('private=secret'));assert.ok(!traffic.includes('remoteAddress'));
