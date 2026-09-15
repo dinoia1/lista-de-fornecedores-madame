@@ -46,9 +46,9 @@ updates: null
 
 ## Publicar
 
-Envie **todo o conteúdo de `public/`**, incluindo `assets/`, para uma hospedagem estática. Os caminhos são relativos e funcionam em uma subpasta. Não publique a raiz do projeto ou os PDFs pagos. O projeto anterior encontrado tinha apenas um HTML; não foi encontrada configuração de hospedagem vinculada a esta LP. Não houve publicação externa nem alterações no sistema Clube do Garimpo.
+Para publicar o site com captura de leads, use hospedagem Node com disco persistente e execute `npm start`. Configure `HOST=0.0.0.0` se necessário e HTTPS na plataforma. O servidor disponibiliza somente `public/` e a API `POST /api/leads`; cadastros ficam em `data/leads.jsonl`, fora da área pública e do Git. Veja `docs/LEADS.md`. Uma hospedagem somente estática apresenta a LP, mas não recebe os cadastros. O código está no GitHub; a hospedagem pública ainda não foi configurada.
 
-Não há autenticação, venda, backend comercial, rastreamento, cookies de marketing ou área de membros implementados por esta LP. A seção “Por dentro” está identificada como demonstração, pois não havia prints reais anexados. O produto apresentado é a coleção de listas.
+A compra é encaminhada ao checkout Lastlink. A LP recebe leads no servidor, mas não possui painel administrativo, envio automático de mensagens, rastreamento ou área de membros. A seção “Por dentro” está identificada como demonstração. O produto apresentado é a coleção de listas.
 
 ## Arquivos entregues
 

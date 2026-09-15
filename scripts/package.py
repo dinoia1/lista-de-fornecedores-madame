@@ -4,7 +4,7 @@ root=Path(__file__).resolve().parents[1]
 files=[]
 for folder in ['public','scripts','docs','output/playwright']:
     files.extend(p for p in (root/folder).rglob('*') if p.is_file() and '__pycache__' not in p.parts)
-files.extend(root/n for n in ['package.json','server.mjs','template.html','catalog.json','README.md'])
+files.extend(root/n for n in ['package.json','server.mjs','lead-store.mjs','template.html','catalog.json','README.md'])
 target=root/'madame-fornecedores-lp.zip'
 with zipfile.ZipFile(target,'w',zipfile.ZIP_DEFLATED) as z:
     for p in sorted(files):

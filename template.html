@@ -9,9 +9,10 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%230b090b'/%3E%3Cpath d='M12 24 22 12h20l10 12-20 29Z' fill='none' stroke='%23e2bb75' stroke-width='4'/%3E%3Cpath d='m12 24 40 0M22 12l10 41 10-41' fill='none' stroke='%23eb168a' stroke-width='3'/%3E%3C/svg%3E">
   <link rel="preload" href="assets/hero.webp" as="image" fetchpriority="high">
 
-  <link rel="stylesheet" href="style.css?v=oferta-card">
+  <link rel="stylesheet" href="style.css?v=leads-categorias">
   <script defer src="config.js?v=lastlink"></script>
-  <script defer src="app.js?v=lastlink"></script>
+  <script defer src="app.js?v=leads-categorias"></script>
+  <script defer src="engagement.js?v=leads-categorias"></script>
 </head>
 <body>
   <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
@@ -37,6 +38,15 @@
       </div>
     </section>
 
+
+    <section class="category-carousel" aria-labelledby="category-heading" aria-roledescription="carrossel">
+      <div class="container">
+        <div class="category-heading"><h2 id="category-heading">Principais categorias <span>Encontre seu próximo garimpo.</span></h2><div class="category-navigation"><button type="button" data-category-prev aria-label="Categorias anteriores" aria-controls="category-track"><svg aria-hidden="true"><use href="#arrow"/></svg></button><button type="button" data-category-next aria-label="Próximas categorias" aria-controls="category-track"><svg aria-hidden="true"><use href="#arrow"/></svg></button></div></div>
+        <ul class="category-track" id="category-track" tabindex="0" aria-label="Categorias de fornecedores">
+          <!-- CATEGORY_ITEMS -->
+        </ul>
+      </div>
+    </section>
 
     <section class="intro-section section" id="o-produto">
       <h1 class="sr-only">Lista de Fornecedores Madame</h1>
@@ -78,6 +88,7 @@
             <p class="collection-count">956 cadastros de fornecedores identificados</p>
             <div class="offer-terms" id="offer-terms" hidden></div>
             <a class="button collection-buy" id="explore-complete" href="#por-dentro">Conhecer o formato <svg aria-hidden="true"><use href="#arrow"/></svg></a>
+            <button type="button" class="lead-open" data-lead-open>Receber informações</button>
           </div>
         </div>
         <p class="collection-disclaimer">956 cadastros nas 20 listas, sem repetir IDs de fichas.<br>Mercadorias são negociadas e compradas separadamente.</p>
@@ -87,5 +98,23 @@
 </main>
   <footer class="site-footer"><div class="container"><div class="footer-top"><a class="brand" href="#topo"><img src="assets/logo.webp" width="290" height="104" loading="lazy" alt="Garimpo da Madame"></a><p>Seu próximo garimpo<br><em>começa na fonte.</em></p><a class="back-top" href="#topo" aria-label="Voltar ao início"><svg><use href="#arrow"/></svg></a></div><div class="footer-bottom"><span>© 2026 Garimpo da Madame.</span><span>Lista de Fornecedores Madame · Produto digital</span></div></div></footer>
   <div class="mobile-sticky" hidden aria-label="Explorar a coleção"><div><strong>20 listas digitais</strong><span>A Mina de Fornecedores</span></div><a href="#por-dentro">Explorar <svg><use href="#arrow"/></svg></a></div>
+  <dialog class="lead-dialog" id="lead-dialog" aria-labelledby="lead-title" aria-describedby="lead-description">
+    <button type="button" class="lead-close" aria-label="Fechar cadastro">×</button>
+    <img class="lead-logo" src="assets/logo.webp" width="650" height="217" alt="Garimpo da Madame" loading="lazy">
+    <p class="eyebrow gold">SEU PRÓXIMO GARIMPO</p>
+    <h2 id="lead-title">Vamos conversar?</h2>
+    <p id="lead-description">Deixe seu contato para receber informações sobre a coleção de fornecedores.</p>
+    <form id="lead-form" method="post" action="/api/leads">
+      <label for="lead-name">Nome<input id="lead-name" name="name" autocomplete="name" required minlength="2" maxlength="100" placeholder="Seu nome"></label>
+      <label for="lead-phone">Telefone com DDD<input id="lead-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="22" placeholder="(11) 99999-9999"></label>
+      <label for="lead-email">E-mail<input id="lead-email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="voce@exemplo.com"></label>
+      <div class="lead-honeypot" aria-hidden="true"><label>Site<input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <label class="lead-consent"><input type="checkbox" name="consent" required><span>Autorizo a Garimpo da Madame a entrar em contato por telefone ou e-mail sobre esta coleção.</span></label>
+      <p class="lead-privacy">Usaremos estes dados para responder ao seu interesse. Você pode pedir a exclusão dos dados ao receber nosso contato.</p>
+      <button class="button button-pink lead-submit" type="submit">Quero receber informações <svg aria-hidden="true"><use href="#arrow"/></svg></button>
+    </form>
+    <p class="lead-status" id="lead-status" role="status" aria-live="polite"></p>
+    <button type="button" class="lead-done" hidden>Voltar ao site</button>
+  </dialog>
 </body>
 </html>

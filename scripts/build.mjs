@@ -8,5 +8,8 @@ const cards=catalog.map(x=>`<article class="catalog-card" data-group="${escape(x
 </article>`).join('\n');
 let html=await readFile(new URL('../template.html',import.meta.url),'utf8');
 html=html.replace(/<!-- CATALOG_START -->[\s\S]*?<!-- CATALOG_END -->/,`<!-- CATALOG_START -->\n${cards}\n<!-- CATALOG_END -->`);
+const categoryIds=['15','09','01','04','18','19','10','11','02','03','05','06'];
+const categories=categoryIds.map(id=>catalog.find(item=>item.id===id));
+html=html.replace('<!-- CATEGORY_ITEMS -->',categories.map(item=>`<li><a class="category-item" href="#colecao"><img src="assets/lista-${item.id}.webp" alt="" width="56" height="79" loading="lazy"><span>${escape(item.id==='15'?'Moda feminina':item.name)}</span><svg aria-hidden="true"><use href="#arrow"/></svg></a></li>`).join('\n'));
 await writeFile(new URL('../public/index.html',import.meta.url),html);
-console.log('Built public/index.html with 20 real covers and accessible catalog content.');
+console.log('Built public/index.html with 12 category slides and the collection offer.');

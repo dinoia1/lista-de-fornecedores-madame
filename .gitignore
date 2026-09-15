@@ -6,6 +6,8 @@ node_modules/
 .agents/
 .playwright-cli/
 output/
+data/
+*.jsonl
 *.zip
 *.log
 *.pem

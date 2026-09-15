@@ -3,9 +3,12 @@ import {readFile, stat} from 'node:fs/promises';
 import {createReadStream} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {createLeadHandler} from './lead-store.mjs';
 const root=path.join(path.dirname(fileURLToPath(import.meta.url)), 'public');
+const handleLead=createLeadHandler(process.env.LEADS_DIR || path.join(root,'..','data'));
 const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2','.mp4':'video/mp4'};
 const server=http.createServer(async(req,res)=>{
+  if(req.url.split('?')[0]==='/api/leads') { await handleLead(req,res); return; }
   if(!['GET','HEAD'].includes(req.method)){res.writeHead(405,{'Allow':'GET, HEAD'});res.end();return;}
   try{
     const url=new URL(req.url,'http://localhost');
@@ -37,4 +40,5 @@ const server=http.createServer(async(req,res)=>{
     res.end(req.method==='HEAD'?undefined:body);
   }catch{res.writeHead(404,{'Content-Type':'text/plain; charset=utf-8'});res.end('Não encontrado');}
 });
-server.listen(Number(process.env.PORT)||4173,'127.0.0.1',()=>console.log(`Prévia: http://localhost:${server.address().port}`));
+server.requestTimeout=15000;
+server.listen(Number(process.env.PORT)||4173,process.env.HOST || '127.0.0.1',()=>console.log(`Prévia: http://localhost:${server.address().port}`));
