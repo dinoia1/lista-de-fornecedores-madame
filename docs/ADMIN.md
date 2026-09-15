@@ -10,7 +10,7 @@ Na primeira inicialização, o servidor cria `data/admin-auth.json` com uma senh
 
 Alternativamente, configure `ADMIN_PASSWORD` (mínimo 12 caracteres) **antes da primeira execução**. A variável não substitui uma senha já cadastrada. Não coloque senhas no código, em links ou em commits. `LEADS_DIR` define o diretório privado de todos os dados; o padrão é `data/`, ignorado pelo Git e excluído dos pacotes.
 
-As sessões duram 8 horas, ficam em memória e são invalidadas ao reiniciar o servidor. Cookie HttpOnly, SameSite=Strict e Secure sob HTTPS. POST administrativo exige origem compatível. Login e coleta de eventos têm limitação de tentativas. Use HTTPS em produção e configure o proxy para sobrescrever `X-Forwarded-Proto`. A senha é única para a administração: ainda não há contas de equipe, 2FA ou recuperação por e-mail.
+As sessões duram até 8 horas, expiram após 30 minutos sem atividade, ficam em memória e são invalidadas ao reiniciar o servidor. Cookie HttpOnly, SameSite=Strict e Secure sob HTTPS. POST administrativo exige origem exata; ações autenticadas também exigem `X-CSRF-Token`, retornado por login/session. Login e coleta de eventos têm limites por visitante. Configure `PUBLIC_ORIGIN` e o IP exato do proxy em `TRUSTED_PROXY_IPS`; cabeçalhos de proxies desconhecidos são ignorados. A senha é única para a administração: ainda não há contas de equipe, 2FA ou recuperação por e-mail. Veja `SECURITY.md`.
 
 ## Atribuição
 
@@ -38,7 +38,7 @@ A atribuição é associada ao lead no envio do formulário. O popup informa ess
 - `admin-auth.json`: hash de acesso.
 - `admin-audit.jsonl`: login, falha de login, troca de senha e exportação, sem dados de contato ou senha.
 
-Todos permanecem fora de `public/`. Faça backup protegido do diretório de dados em volume persistente e defina retenção/exclusão de acordo com sua operação. O projeto não configura automaticamente backup externo nem exclusão periódica. Nunca publique esse diretório ou inclua seus dados em ZIP.
+Todos permanecem fora de `public/`. A configuração da VPS inclui backup diário criptografado com Restic, na própria máquina. Backup externo e política de expurgo ainda não estão configurados; veja `DEPLOY-VPS.md`. Nunca publique esse diretório ou inclua seus dados em ZIP.
 
 Esta implementação roda em um único processo Node com disco persistente. Escritas por arquivo são serializadas; consultas leem o histórico do disco. Para grande volume ou múltiplas instâncias, migre para banco compartilhado com índices, sessões e rate limit centralizados. Hospedagem puramente estática não atende às APIs.
 

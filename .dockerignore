@@ -1,0 +1,10 @@
+**
+!Dockerfile
+!package.json
+!server.mjs
+!lead-store.mjs
+!admin-store.mjs
+!attribution.mjs
+!security.mjs
+!public/
+!public/**

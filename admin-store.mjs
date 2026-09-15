@@ -5,17 +5,11 @@ import {randomBytes, randomUUID, scrypt as derive, timingSafeEqual} from 'node:c
 import {promisify} from 'node:util';
 import path from 'node:path';
 import {attribution} from './attribution.mjs';
+import {clientAddress, isSecure, sameOrigin, readJson, RequestError} from './security.mjs';
 const scrypt = promisify(derive);
 const day = value => new Intl.DateTimeFormat('en-CA', {timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(value));
 const json = (res, code, data) => {res.writeHead(code, {'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}); res.end(JSON.stringify(data));};
-async function body(req) {
-  if (!/^application\/json(?:;|$)/i.test(req.headers['content-type'] || '')) throw Error('Formato inválido.');
-  let size = 0; const chunks = [];
-  for await (const chunk of req) {size += chunk.length; if(size > 8192) throw Error('Solicitação muito grande.'); chunks.push(chunk);}
-  const value = JSON.parse(Buffer.concat(chunks).toString());
-  if (!value || typeof value !== 'object' || Array.isArray(value)) throw Error('Dados inválidos.');
-  return value;
-}
+const body = readJson;
 async function records(file, visit) {
   const stream = createReadStream(file, {encoding:'utf8'});
   const lines = createInterface({input:stream, crlfDelay:Infinity});
@@ -25,9 +19,11 @@ async function records(file, visit) {
 }
 export function createAdminHandler(directory, options = {}) {
   const sessions = new Map(), limits = new Map(), eventIds = new Map();
-  let writes = Promise.resolve(), authReady;
+  let writes = Promise.resolve(), authReady, passwordChecks = 0, passwordChangeInProgress = false;
+  let authGeneration = 0;
+  const idleMs = options.idleMs ?? 30*60000;
   const write = (file, value) => {
-    const pending = writes.then(async () => {await mkdir(directory,{recursive:true}); await appendFile(path.join(directory,file), JSON.stringify(value)+'\n',{mode:0o600});});
+    const pending = writes.then(async () => {await mkdir(directory,{recursive:true,mode:0o700}); await appendFile(path.join(directory,file), JSON.stringify(value)+'\n',{mode:0o600});});
     writes = pending.catch(()=>{}); return pending;
   };
   const audit = action => write('admin-audit.jsonl', {at:new Date().toISOString(), action});
@@ -36,11 +32,11 @@ export function createAdminHandler(directory, options = {}) {
     return {salt, hash:(await scrypt(password,salt,64)).toString('hex')};
   }
   async function initialize() {
-    await mkdir(directory,{recursive:true});
+    await mkdir(directory,{recursive:true,mode:0o700});
     try {return JSON.parse(await readFile(path.join(directory,'admin-auth.json'),'utf8'));}
     catch(error) {if(error.code !== 'ENOENT') throw error;}
     const password = options.password || process.env.ADMIN_PASSWORD || randomBytes(18).toString('base64url');
-    if(password.length < 12) throw Error('ADMIN_PASSWORD precisa de ao menos 12 caracteres.');
+    if(password.length < 12 || password.length > 256) throw Error('ADMIN_PASSWORD precisa de 12 a 256 caracteres.');
     const record = await passwordRecord(password);
     await writeFile(path.join(directory,'admin-auth.json'),JSON.stringify(record),{flag:'wx',mode:0o600});
     if(!options.password && !process.env.ADMIN_PASSWORD) await writeFile(path.join(directory,'admin-first-access.txt'),'Painel: /admin\nSenha inicial: '+password+'\nTroque a senha no painel após entrar.\n',{mode:0o600});
@@ -54,11 +50,19 @@ export function createAdminHandler(directory, options = {}) {
     return ++entry.count > maximum;
   }
   function session(req) {
-    const now=Date.now(); for(const [key,value] of sessions) if(value <= now) sessions.delete(key);
+    const now=Date.now(); for(const [key,value] of sessions) if(value.expires <= now || value.idle <= now) sessions.delete(key);
     const token = /(?:^|;\s*)madame_admin=([a-f0-9]{64})(?:;|$)/.exec(req.headers.cookie || '')?.[1];
-    return token && sessions.has(token) ? token : null;
+    if(!token || !sessions.has(token)) return null;
+    sessions.get(token).idle = now+idleMs;
+    return token;
   }
-  const cookie = (req,token,age) => `madame_admin=${token}; Path=/api/admin; HttpOnly; SameSite=Strict; Max-Age=${age}${req.socket.encrypted || req.headers['x-forwarded-proto']==='https' ? '; Secure' : ''}`;
+  const cookie = (req,token,age) => `madame_admin=${token}; Path=/api/admin; HttpOnly; SameSite=Strict; Max-Age=${age}${isSecure(req) ? '; Secure' : ''}`;
+  async function verifyPassword(password, record) {
+    if(passwordChecks >= 4) throw new RequestError(429,'Muitas tentativas simultâneas. Aguarde.');
+    passwordChecks++;
+    try {return timingSafeEqual(await scrypt(password,record.salt,64),Buffer.from(record.hash,'hex'));}
+    finally {passwordChecks--;}
+  }
   async function dashboard(url, exporting) {
     const end = url.searchParams.get('to') || day(Date.now());
     const start = url.searchParams.get('from') || day(Date.now()-29*86400000);
@@ -102,12 +106,11 @@ export function createAdminHandler(directory, options = {}) {
     const url=new URL(req.url,'http://localhost'), route=url.pathname;
     try {
       if(req.method==='POST') {
-        try {if(new URL(req.headers.origin).host!==req.headers.host)throw Error();}
-        catch {json(res,403,{error:'Origem não permitida.'});return;}
+        if(!sameOrigin(req)){json(res,403,{error:'Origem não permitida.'});return;}
       }
       if(route==='/api/track') {
         if(req.method!=='POST'){json(res,405,{error:'Método não permitido.'});return;}
-        if(limited('track:'+req.socket.remoteAddress,120,60000)){json(res,429,{error:'Limite de eventos.'});return;}
+        if(limited('track:'+clientAddress(req),120,60000)){res.setHeader('Retry-After','60');json(res,429,{error:'Limite de eventos.'});return;}
         const input=await body(req), a=attribution(input.attribution);
         if(!['pageview','checkout'].includes(input.type) || !a.sessionId || !/^[a-f0-9-]{36}$/i.test(input.id || '')) {json(res,400,{error:'Evento inválido.'});return;}
         for(const [id,time] of eventIds)if(time<Date.now()-86400000)eventIds.delete(id);
@@ -119,32 +122,41 @@ export function createAdminHandler(directory, options = {}) {
         json(res,201,{ok:true});return;
       }
       if(route==='/api/admin/login' && req.method==='POST') {
-        if(limited('login:'+req.socket.remoteAddress,8,900000)){json(res,429,{error:'Muitas tentativas. Aguarde 15 minutos.'});return;}
+        if(limited('login:'+clientAddress(req),8,900000) || limited('login-global',80,60000)){res.setHeader('Retry-After','900');json(res,429,{error:'Muitas tentativas. Aguarde 15 minutos.'});return;}
         const input=await body(req); const password=typeof input.password==='string'?input.password:'';
         if(password.length>256){json(res,400,{error:'Senha inválida.'});return;}
         authReady ||= initialize(); const record=await authReady;
-        const hash=await scrypt(password,record.salt,64);
-        if(!timingSafeEqual(hash,Buffer.from(record.hash,'hex'))){await audit('login-failed');json(res,401,{error:'Senha incorreta.'});return;}
+        const generation=authGeneration;
+        if(!await verifyPassword(password,record)){await audit('login-failed');json(res,401,{error:'Senha incorreta.'});return;}
+        if(generation!==authGeneration || passwordChangeInProgress){json(res,401,{error:'Senha alterada. Entre novamente.'});return;}
         session(req); if(sessions.size>=500){json(res,429,{error:'Limite de sessões.'});return;}
-        const token=randomBytes(32).toString('hex');await audit('login');sessions.set(token,Date.now()+8*3600000);
-        res.setHeader('Set-Cookie',cookie(req,token,28800));json(res,200,{ok:true});return;
+        const token=randomBytes(32).toString('hex'),csrfToken=randomBytes(32).toString('hex');await audit('login');
+        if(generation!==authGeneration || passwordChangeInProgress){json(res,401,{error:'Senha alterada. Entre novamente.'});return;}
+        sessions.set(token,{expires:Date.now()+8*3600000,idle:Date.now()+idleMs,csrfToken});
+        res.setHeader('Set-Cookie',cookie(req,token,28800));json(res,200,{ok:true,csrfToken});return;
       }
       const token=session(req);if(!token){json(res,401,{error:'Entre no painel para continuar.'});return;}
-      if(route==='/api/admin/session' && req.method==='GET'){json(res,200,{ok:true});return;}
-      if(route==='/api/admin/logout' && req.method==='POST'){sessions.delete(token);res.setHeader('Set-Cookie',cookie(req,'',0));json(res,200,{ok:true});return;}
+      if(req.method==='POST' && req.headers['x-csrf-token']!==sessions.get(token).csrfToken){json(res,403,{error:'Sessão inválida. Recarregue o painel.'});return;}
+      if(route==='/api/admin/session' && req.method==='GET'){json(res,200,{ok:true,csrfToken:sessions.get(token).csrfToken});return;}
+      if(route==='/api/admin/logout' && req.method==='POST'){sessions.delete(token);res.setHeader('Set-Cookie',cookie(req,'',0));await audit('logout');json(res,200,{ok:true});return;}
       if(route==='/api/admin/password' && req.method==='POST') {
-        if(limited('password:'+req.socket.remoteAddress,8,900000)){json(res,429,{error:'Aguarde 15 minutos.'});return;}
+        if(limited('password:'+clientAddress(req),8,900000)){json(res,429,{error:'Aguarde 15 minutos.'});return;}
         const input=await body(req);
         if(typeof input.password!=='string'||input.password.length<12||input.password.length>256){json(res,400,{error:'Use uma senha entre 12 e 256 caracteres.'});return;}
+        if(passwordChangeInProgress){json(res,409,{error:'Outra alteração de senha está em andamento.'});return;}
+        passwordChangeInProgress=true;
+        try {
         const record=await authReady;
-        if(typeof input.current!=='string'||input.current.length>256||!timingSafeEqual(await scrypt(input.current,record.salt,64),Buffer.from(record.hash,'hex'))){json(res,401,{error:'Senha atual incorreta.'});return;}
+        if(typeof input.current!=='string'||input.current.length>256||!await verifyPassword(input.current,record)){json(res,401,{error:'Senha atual incorreta.'});return;}
         const next=await passwordRecord(input.password);
         const temporary=path.join(directory,'admin-auth-'+randomUUID()+'.tmp');
         await writeFile(temporary,JSON.stringify(next),{mode:0o600});await rename(temporary,path.join(directory,'admin-auth.json'));authReady=Promise.resolve(next);
         await unlink(path.join(directory,'admin-first-access.txt')).catch(error=>{if(error.code!=='ENOENT')throw error;});
-        sessions.clear(); await audit('password-changed');res.setHeader('Set-Cookie',cookie(req,'',0));json(res,200,{ok:true});return;
+        authGeneration++;sessions.clear(); await audit('password-changed');res.setHeader('Set-Cookie',cookie(req,'',0));json(res,200,{ok:true});return;
+        } finally {passwordChangeInProgress=false;}
       }
       if(['/api/admin/dashboard','/api/admin/export'].includes(route) && req.method==='GET') {
+        if(limited('reports:'+token,60,60000)){res.setHeader('Retry-After','60');json(res,429,{error:'Aguarde antes de atualizar novamente.'});return;}
         const exporting=route.endsWith('/export');const data=await dashboard(url,exporting);
         if(!exporting){json(res,200,data);return;}
         const cell=value=>'"'+String(value??'').replace(/^[=+@\-\t\r\n]/,"'$&").replace(/"/g,'""')+'"';
@@ -152,7 +164,7 @@ export function createAdminHandler(directory, options = {}) {
         await audit('leads-export');res.writeHead(200,{'Content-Type':'text/csv; charset=utf-8','Content-Disposition':'attachment; filename="leads-madame.csv"','Cache-Control':'no-store'});res.end('\ufeff'+csv);return;
       }
       json(res,404,{error:'Rota não encontrada.'});
-    } catch(error) {json(res, error instanceof SyntaxError || /período|Formato|Dados|Solicitação/.test(error.message) ? 400 : 503,{error:error instanceof SyntaxError ? 'Dados inválidos.' : /período|Formato|Dados|Solicitação/.test(error.message) ? error.message : 'Não foi possível concluir. Tente novamente.'});}
+    } catch(error) {if(error instanceof RequestError){res.setHeader('Connection','close');json(res,error.status,{error:error.message});return;} console.error(JSON.stringify({event:'admin-request-failed',code:error.code || error.name}));json(res, error instanceof SyntaxError || /período|Formato|Dados|Solicitação/.test(error.message) ? 400 : 503,{error:error instanceof SyntaxError ? 'Dados inválidos.' : /período|Formato|Dados|Solicitação/.test(error.message) ? error.message : 'Não foi possível concluir. Tente novamente.'});}
   };
   handler.initialize = () => authReady ||= initialize();
   return handler;

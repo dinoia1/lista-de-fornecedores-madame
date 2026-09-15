@@ -6,7 +6,7 @@ Repositório: https://github.com/dinoia1/lista-de-fornecedores-madame (privado).
 
 ## Executar
 
-Requer Node.js 20 ou posterior. No PowerShell, nesta pasta:
+Requer Node.js 24 ou posterior. No PowerShell, nesta pasta:
 
 ```powershell
 npm.cmd start
@@ -47,7 +47,7 @@ updates: null
 
 ## Publicar
 
-Para publicar o site com captura de leads e painel administrativo, use hospedagem Node com disco persistente e execute `npm start`. Configure `HOST=0.0.0.0` se necessário e HTTPS na plataforma. Os arquivos públicos ficam em `public/`; contatos, eventos e autenticação ficam em `data/`, fora da área pública e do Git. Veja `docs/LEADS.md` e `docs/ADMIN.md`. Uma hospedagem somente estática não atende às APIs. A hospedagem pública ainda não foi configurada.
+A implantação na VPS usa Docker, dados persistentes e Caddy. O subdomínio preparado é `segredo.ogarimpodigital.com.br`, dependente de DNS e emissão do certificado para acesso público. Consulte `docs/DEPLOY-VPS.md` para operação, atualização e backup, e `docs/SECURITY.md` para as proteções e limites. Produção exige `NODE_ENV=production`, `PUBLIC_ORIGIN` HTTPS e `TRUSTED_PROXY_IPS` configurado para o proxy. Uma hospedagem somente estática não atende às APIs.
 
 A compra é encaminhada ao checkout Lastlink. Acesse `/admin` para consultar e exportar leads e acompanhar origens, campanhas, sessões e cliques. A senha inicial é gerada no arquivo privado `data/admin-first-access.txt`; troque-a no painel após entrar. Alternativamente, defina `ADMIN_PASSWORD` antes da primeira execução. Leia `docs/ADMIN.md` para configuração e definições das métricas. Não há confirmação de vendas, envio automático de mensagens ou área de membros. A seção “Por dentro” é uma demonstração.
 

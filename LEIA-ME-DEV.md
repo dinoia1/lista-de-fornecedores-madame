@@ -7,7 +7,7 @@ Este pacote contém a landing page editável, os vídeos, as imagens, o servidor
 
 ## 1. Executar em outra máquina
 
-1. Instale Node.js 20 ou posterior.
+1. Instale Node.js 24 ou posterior.
 2. Extraia o ZIP inteiro. Abra o terminal na pasta que contém `package.json`.
 3. Execute os comandos abaixo. No macOS/Linux, use `npm` no lugar de `npm.cmd`.
 
@@ -98,9 +98,12 @@ Configure:
 HOST=0.0.0.0
 PORT=porta definida pela hospedagem
 LEADS_DIR=caminho privado em volume persistente
+NODE_ENV=production
+PUBLIC_ORIGIN=https://seu-subdominio
+TRUSTED_PROXY_IPS=IP exato do proxy
 ```
 
-Comando de build: `npm run build`. Comando de inicialização: `npm start`. Configure HTTPS no proxy da plataforma, proteja o volume de leads e estabeleça backups. Nenhuma hospedagem pública ou domínio foi configurado nesta entrega. O endereço localhost funciona somente na máquina em que o servidor está rodando.
+Comando de build: `npm run build`. Comando de inicialização: `npm start`. A instalação Docker da VPS está descrita em `docs/DEPLOY-VPS.md`, com rede privada, backup criptografado e configuração do subdomínio. O acesso público depende do registro DNS e do certificado HTTPS. Confira `docs/SECURITY.md` antes de alterar o proxy. O endereço localhost funciona somente na máquina em que o servidor está rodando.
 
 O armazenamento JSONL é apropriado para uma instância. Para múltiplas instâncias, migre para banco compartilhado e ajuste o controle de abuso. O limite atual da API é 10 tentativas por 10 minutos por endereço de conexão, em memória; atrás de proxy, usuários podem compartilhar esse limite. Não confie em cabeçalhos de IP sem definir proxies confiáveis. Não existe backup automático remoto nesta versão.
 

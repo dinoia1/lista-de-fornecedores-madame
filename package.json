@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "scripts": {"start":"node server.mjs", "build":"node scripts/build.mjs", "check":"node scripts/check.mjs", "test:leads":"node scripts/check-leads.mjs", "test:admin":"node scripts/check-admin.mjs", "test:qualification":"node scripts/check-qualification.mjs"},
-  "engines": {"node": ">=20"}
+  "scripts": {"start":"node server.mjs", "build":"node scripts/build.mjs", "check":"node scripts/check.mjs", "test:leads":"node scripts/check-leads.mjs", "test:admin":"node scripts/check-admin.mjs", "test:qualification":"node scripts/check-qualification.mjs", "test:security":"node scripts/check-security.mjs"},
+  "engines": {"node": ">=24"}
 }

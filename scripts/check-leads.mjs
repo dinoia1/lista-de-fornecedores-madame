@@ -10,7 +10,7 @@ const server=http.createServer(handler);
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const base=`http://127.0.0.1:${server.address().port}`;
 const lead={name:'Teste João',phone:'(11) 99999-0000',email:'teste@example.com',consent:true,website:''};
-const post=(data,headers={})=>fetch(base,{method:'POST',headers:{'Content-Type':'application/json',...headers},body:JSON.stringify(data)});
+const post=(data,headers={})=>fetch(base,{method:'POST',headers:{'Content-Type':'application/json',Origin:base,...headers},body:JSON.stringify(data)});
 try {
   assert.equal((await fetch(base)).status,405);
   assert.equal((await post(lead,{Origin:'https://outside.example'})).status,403);
@@ -33,7 +33,7 @@ try {
   const failure=http.createServer(createLeadHandler(path.join(directory,'blocker')));
   await new Promise(resolve=>failure.listen(0,'127.0.0.1',resolve));
   try {
-    const failed=await fetch(`http://127.0.0.1:${failure.address().port}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(lead)});
+    const failed=await fetch(`http://127.0.0.1:${failure.address().port}`,{method:'POST',headers:{'Content-Type':'application/json',Origin:`http://127.0.0.1:${failure.address().port}`},body:JSON.stringify(lead)});
     assert.equal(failed.status,503);assert.equal((await failed.json()).ok,false);
   } finally {await new Promise(resolve=>failure.close(resolve));}
   console.log('PASS: validation, consent, origin, body limit, concurrency, persistence, rate limit and storage failure.');

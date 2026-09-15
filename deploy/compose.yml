@@ -1,0 +1,57 @@
+name: segredo-madame
+services:
+  app:
+    build:
+      context: ..
+    image: segredo-madame:${IMAGE_TAG:-local}
+    restart: unless-stopped
+    init: true
+    user: "${APP_UID:-1001}:${APP_GID:-1001}"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    mem_limit: 512m
+    cpus: 1.5
+    stop_grace_period: 25s
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 4173
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?Configure a origem HTTPS}
+      TRUSTED_PROXY_IPS: ${TRUSTED_PROXY_IPS:?Configure o IP exato do proxy}
+      LEADS_DIR: /data
+    volumes:
+      - ${DATA_DIR:?Configure o diretorio privado}:/data
+    tmpfs: ["/tmp:size=16m,mode=1777"]
+    networks:
+      edge:
+        ipv4_address: 172.28.50.3
+        aliases: [segredo-madame-app]
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+  backup:
+    image: restic/restic:0.18.1@sha256:39d9072fb5651c80d75c7a811612eb60b4c06b32ffe87c2e9f3c7222e1797e76
+    profiles: [maintenance]
+    user: "${APP_UID:-1001}:${APP_GID:-1001}"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    network_mode: none
+    mem_limit: 256m
+    environment:
+      RESTIC_REPOSITORY: /backup
+      RESTIC_PASSWORD_FILE: /run/secrets/backup-password
+      RESTIC_CACHE_DIR: /tmp/restic
+    volumes:
+      - ${DATA_DIR:?Configure o diretorio privado}:/data:ro
+      - ${BACKUP_DIR:?Configure o diretorio de backup}:/backup
+      - ${BACKUP_PASSWORD_FILE:?Configure o arquivo da chave}:/run/secrets/backup-password:ro
+    tmpfs: ["/tmp:size=64m,mode=1777"]
+networks:
+  edge:
+    external: true
+    name: segredo-madame-edge

@@ -2,9 +2,9 @@ from pathlib import Path
 import zipfile, hashlib, json
 root=Path(__file__).resolve().parents[1]
 files=[]
-for folder in ['public','scripts','docs','output/playwright']:
+for folder in ['public','scripts','docs','deploy','output/playwright']:
     files.extend(p for p in (root/folder).rglob('*') if p.is_file() and '__pycache__' not in p.parts)
-files.extend(root/n for n in ['.gitignore','.gitattributes','package.json','server.mjs','lead-store.mjs','admin-store.mjs','attribution.mjs','template.html','catalog.json','README.md','LEIA-ME-DEV.md'])
+files.extend(root/n for n in ['.gitignore','.gitattributes','.dockerignore','Dockerfile','package.json','server.mjs','lead-store.mjs','admin-store.mjs','attribution.mjs','security.mjs','template.html','catalog.json','README.md','LEIA-ME-DEV.md'])
 target=root/'madame-fornecedores-lp.zip'
 with zipfile.ZipFile(target,'w',zipfile.ZIP_DEFLATED) as z:
     for p in sorted(files):

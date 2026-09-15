@@ -13,7 +13,8 @@ const leads=createLeadHandler(directory);
 const server=http.createServer((req,res)=>req.url==='/api/leads'?leads(req,res):handler(req,res));
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const base=`http://127.0.0.1:${server.address().port}`;
-const post=(route,value,cookie='',origin=base)=>fetch(base+route,{method:'POST',headers:{'Content-Type':'application/json',Origin:origin,Cookie:cookie},body:JSON.stringify(value)});
+let csrfToken='';
+const post=(route,value,cookie='',origin=base)=>fetch(base+route,{method:'POST',headers:{'Content-Type':'application/json',Origin:origin,Cookie:cookie,'X-CSRF-Token':csrfToken},body:JSON.stringify(value)});
 const get=(route,cookie='')=>fetch(base+route,{headers:{Cookie:cookie}});
 try {
   assert.equal((await get('/api/admin/dashboard')).status,401);
@@ -21,6 +22,7 @@ try {
   assert.equal((await post('/api/admin/login',{password},'','https://outside.test')).status,403);
   assert.equal((await post('/api/admin/login',{password:'wrong'})).status,401);
   const login=await post('/api/admin/login',{password});assert.equal(login.status,200);
+  csrfToken=(await login.json()).csrfToken;
   const cookie=login.headers.get('set-cookie').split(';')[0];
   assert.match(login.headers.get('set-cookie'),/HttpOnly; SameSite=Strict/);
   assert.equal((await get('/api/admin/session',cookie)).status,200);
@@ -51,6 +53,7 @@ try {
   assert.equal((await get('/api/admin/session',cookie)).status,401);
   assert.equal((await post('/api/admin/login',{password})).status,401);
   const nextLogin=await post('/api/admin/login',{password:nextPassword});assert.equal(nextLogin.status,200);
+  csrfToken=(await nextLogin.json()).csrfToken;
   const nextCookie=nextLogin.headers.get('set-cookie').split(';')[0];
   await post('/api/admin/logout',{},nextCookie);assert.equal((await get('/api/admin/session',nextCookie)).status,401);
   const reloaded=createAdminHandler(directory);await reloaded.initialize();

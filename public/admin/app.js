@@ -1,15 +1,15 @@
 (() => {
   'use strict';
   const $=s=>document.querySelector(s), login=$('#login'), dashboard=$('#dashboard'), filters=$('#filters');
-  let page=1, pages=1, requestNumber=0;
+  let page=1, pages=1, requestNumber=0, csrfToken='';
   const number=v=>new Intl.NumberFormat('pt-BR',{maximumFractionDigits:1}).format(v);
   const date=v=>new Intl.DateTimeFormat('pt-BR',{timeZone:'America/Sao_Paulo',dateStyle:'short',timeStyle:'short'}).format(new Date(v));
   const localDay=v=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'}).format(v);
   filters.elements.from.value=localDay(new Date(Date.now()-29*86400000));filters.elements.to.value=localDay(new Date());
   function showLogin(){dashboard.hidden=true;login.hidden=false;$('#login-form').elements.password.focus();}
   async function api(url, data) {
-    const response=await fetch(url,data?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}:{});
-    const result=await response.json();if(!response.ok){if(response.status===401 && !url.endsWith('/login')&&!url.endsWith('/password'))showLogin();throw Error(result.error || 'Não foi possível concluir.');}return result;
+    const response=await fetch(url,data?{method:'POST',headers:{'Content-Type':'application/json',...(csrfToken?{'X-CSRF-Token':csrfToken}:{})},body:JSON.stringify(data)}:{});
+    const result=await response.json();if(!response.ok){if(response.status===401 && !url.endsWith('/login')&&!url.endsWith('/password'))showLogin();throw Error(result.error || 'Não foi possível concluir.');}if(result.csrfToken)csrfToken=result.csrfToken;return result;
   }
   function params(){const result=new URLSearchParams(new FormData(filters));result.set('q',$('#search').value);for(const [key,value] of new FormData($('#profile-filters')))result.set(key,value);result.set('page',page);return result;}
   function element(tag,text,className){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(className)e.className=className;return e;}
