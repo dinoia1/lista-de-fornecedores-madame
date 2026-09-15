@@ -1,0 +1,72 @@
+async page => {
+  const report = {checks:[],viewports:[],errors:[],responses:[]};
+  const check = (name,ok) => {report.checks.push({name,pass:!!ok}); if(!ok)throw Error(name);};
+  page.on('pageerror',e=>report.errors.push(e.message));
+  page.on('console',m=>{if(m.type()==='error')report.errors.push(m.text());});
+  page.on('response',r=>{if(r.status()>=400)report.responses.push({url:r.url(),status:r.status()});});
+  await page.goto('http://localhost:4173');
+  await page.setViewportSize({width:1440,height:1000});
+  check('initial 8 of 20 cards',await page.locator('.catalog-card:visible').count()===8);
+  for(const [label,total] of [['Casa e rotina',4],['Moda',6],['Beleza e acessórios',3],['Tecnologia',2],['Outras frentes',5]]){
+    await page.getByRole('button',{name:label,exact:true}).click();
+    check(`filter ${label} = ${total}`,await page.locator('.catalog-card:visible').count()===total);
+  }
+  await page.getByRole('button',{name:'Moda',exact:true}).click();
+  const fit=page.getByRole('button',{name:'Ver detalhes de Feira FIT',exact:true});
+  await fit.focus(); await page.keyboard.press('Enter');
+  check('keyboard opens correct dialog',await page.locator('#list-dialog').evaluate(d=>d.open)&&await page.locator('#dialog-title').innerText()==='Feira FIT');
+  check('FIT description matches infant PDF',(await page.locator('#dialog-description').innerText()).includes('moda infantil'));
+  await page.keyboard.press('Shift+Tab');
+  check('dialog traps keyboard focus',await page.evaluate(()=>document.querySelector('#list-dialog').contains(document.activeElement)));
+  await page.keyboard.press('Escape');
+  check('Escape closes and restores focus',await fit.evaluate(el=>el===document.activeElement)&&!(await page.locator('#list-dialog').evaluate(d=>d.open)));
+  await page.getByRole('button',{name:'Todas as listas 20',exact:true}).click();
+  await page.getByRole('button',{name:'Ver todas as 20 listas +',exact:true}).click();
+  check('all 20 revealed',await page.locator('.catalog-card:visible').count()===20);
+  await page.locator('.faqs summary').first().focus();await page.keyboard.press('Enter');
+  check('FAQ keyboard opens',await page.locator('.faqs details').first().evaluate(d=>d.open));
+  await page.keyboard.press('Enter');
+  await page.locator('#explore-complete').click();
+  check('no invented checkout',await page.locator('#explore-complete').getAttribute('href')==='#categorias');
+  check('no empty commercial terms',await page.locator('#offer-terms').isHidden());
+  await page.evaluate(async()=>{await Promise.all([...document.images].map(async img=>{img.loading='eager';await img.decode();}));});
+  check('all images load',await page.evaluate(()=>[...document.images].every(i=>i.complete&&i.naturalWidth>0)));
+  for(const width of [320,390,768,1024,1440]){
+    await page.setViewportSize({width,height:width<760?844:1000});
+    const metrics=await page.evaluate(()=>({width:innerWidth,documentWidth:document.documentElement.scrollWidth,overflow:[...document.querySelectorAll('h1,h2,h3,p,summary,.button')].filter(el=>el.getClientRects().length&&el.scrollWidth>el.clientWidth+2).map(el=>el.textContent.trim().slice(0,70))}));
+    report.viewports.push(metrics);
+    check(`no horizontal scroll at ${width}`,metrics.documentWidth<=width);
+    check(`no clipped copy at ${width}`,metrics.overflow.length===0);
+  }
+  await page.goto('http://localhost:4173');
+  await page.setViewportSize({width:1440,height:1000});
+  await page.evaluate(async()=>{await Promise.all([...document.images].map(async img=>{img.loading='eager';await img.decode();}));});
+  await page.screenshot({path:'output/playwright/desktop.png'});
+  await page.screenshot({path:'output/playwright/desktop-completa.png',fullPage:true});
+  await page.setViewportSize({width:390,height:844});
+  await page.getByRole('button',{name:'Abrir menu',exact:true}).click();
+  check('mobile menu opens',await page.locator('#mobile-nav').isVisible());
+  await page.keyboard.press('Escape');
+  check('mobile menu Escape',await page.locator('#mobile-nav').isHidden());
+  await page.getByRole('button',{name:'Abrir menu',exact:true}).click();
+  await page.locator('#mobile-nav').getByRole('link',{name:'As listas',exact:true}).click();
+  check('mobile navigation closes menu',await page.locator('#mobile-nav').isHidden());
+  await page.getByRole('button',{name:'Ver detalhes de Utilidades domésticas',exact:true}).click();
+  check('mobile dialog opens',await page.locator('#list-dialog').evaluate(d=>d.open));
+  await page.screenshot({path:'output/playwright/mobile-detalhes.png'});
+  await page.getByRole('button',{name:'Continuar explorando',exact:true}).click();
+  check('mobile close button',!(await page.locator('#list-dialog').evaluate(d=>d.open)));
+  await page.emulateMedia({reducedMotion:'reduce'});
+  check('reduced motion',await page.evaluate(()=>getComputedStyle(document.querySelector('.hero-copy')).animationName==='none'&&getComputedStyle(document.documentElement).scrollBehavior==='auto'));
+  await page.evaluate(()=>scrollTo(0,0));
+  await page.screenshot({path:'output/playwright/mobile.png'});
+  await page.screenshot({path:'output/playwright/mobile-completa.png',fullPage:true});
+  check('no console errors',report.errors.length===0);
+  check('no failed HTTP responses',report.responses.length===0);
+  const context=await page.context().browser().newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
+  const plain=await context.newPage();await plain.goto('http://localhost:4173');
+  check('20 cards available without JavaScript',await plain.locator('.catalog-card').count()===20);
+  check('hero visible without JavaScript',await plain.locator('h1').isVisible());
+  await context.close();
+  return report;
+}

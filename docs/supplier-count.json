@@ -1,0 +1,135 @@
+{
+  "pdfCount": 20,
+  "uniqueSupplierRecordsAcrossCollection": 956,
+  "sumUniqueRecordsPerList": 974,
+  "supplierLinkOccurrences": 1056,
+  "repeatedMembershipsAcrossLists": 18,
+  "method": "Unique numerical supplier record IDs from marketplace links. Excludes support, social and promotional links. Records are not proof of distinct legal companies or current availability.",
+  "lists": [
+    {
+      "file": "Acessórios.pdf",
+      "uniqueSupplierRecords": 38,
+      "supplierLinkOccurrences": 76,
+      "otherLinks": 0
+    },
+    {
+      "file": "Bolsas--e--Malas.pdf",
+      "uniqueSupplierRecords": 8,
+      "supplierLinkOccurrences": 8,
+      "otherLinks": 0
+    },
+    {
+      "file": "DROPSHIPPING.pdf",
+      "uniqueSupplierRecords": 22,
+      "supplierLinkOccurrences": 22,
+      "otherLinks": 3
+    },
+    {
+      "file": "FEIRA--ABRIN.pdf",
+      "uniqueSupplierRecords": 24,
+      "supplierLinkOccurrences": 24,
+      "otherLinks": 3
+    },
+    {
+      "file": "FEIRA--FIT.pdf",
+      "uniqueSupplierRecords": 25,
+      "supplierLinkOccurrences": 25,
+      "otherLinks": 3
+    },
+    {
+      "file": "Lista--Moda--Feminina--2.pdf",
+      "uniqueSupplierRecords": 52,
+      "supplierLinkOccurrences": 52,
+      "otherLinks": 0
+    },
+    {
+      "file": "Lista--Moda--Feminina--3.pdf",
+      "uniqueSupplierRecords": 43,
+      "supplierLinkOccurrences": 86,
+      "otherLinks": 0
+    },
+    {
+      "file": "Lista--Moda--Feminina.pdf",
+      "uniqueSupplierRecords": 55,
+      "supplierLinkOccurrences": 55,
+      "otherLinks": 83
+    },
+    {
+      "file": "MAPA--01-----UTILIDADES--DOMÉSTICAS-----ATUALIZADA--COM--NOVOS--FORNECEDORES.pdf",
+      "uniqueSupplierRecords": 145,
+      "supplierLinkOccurrences": 145,
+      "otherLinks": 1
+    },
+    {
+      "file": "MAPA--02-----Brinquedos-----ATUALIZADA--COM--NOVOS--FORNECEDORES.pdf",
+      "uniqueSupplierRecords": 133,
+      "supplierLinkOccurrences": 133,
+      "otherLinks": 4
+    },
+    {
+      "file": "MAPA--03-----PAPELARIA-----ATUALIZADO--COM--NOVOS--FORNECEDORES.pdf",
+      "uniqueSupplierRecords": 59,
+      "supplierLinkOccurrences": 60,
+      "otherLinks": 1
+    },
+    {
+      "file": "MAPA--04-----ELETRONICOS-----ATUALIZADO--COM--NOVOS--FORNECEDORES.pdf",
+      "uniqueSupplierRecords": 53,
+      "supplierLinkOccurrences": 53,
+      "otherLinks": 2
+    },
+    {
+      "file": "MAPA--05-----PET-----NOVOS--FORNECEDORES.pdf",
+      "uniqueSupplierRecords": 46,
+      "supplierLinkOccurrences": 46,
+      "otherLinks": 3
+    },
+    {
+      "file": "MAPA--06-----FERRAMENTAS-----NOVOS--FORNECEDORES.pdf",
+      "uniqueSupplierRecords": 40,
+      "supplierLinkOccurrences": 40,
+      "otherLinks": 2
+    },
+    {
+      "file": "MAPA--07-----Queridinhos--1-----NOVOS--FORNECEDORES.pdf",
+      "uniqueSupplierRecords": 76,
+      "supplierLinkOccurrences": 76,
+      "otherLinks": 2
+    },
+    {
+      "file": "MAPA--08-----Queridinhos--2-----NOVOS--FORNECEDORES.pdf",
+      "uniqueSupplierRecords": 71,
+      "supplierLinkOccurrences": 71,
+      "otherLinks": 2
+    },
+    {
+      "file": "MAPA--09-----Maquiagens--e--cosméticos-----NOVOS--FORNECEDORES.pdf",
+      "uniqueSupplierRecords": 59,
+      "supplierLinkOccurrences": 59,
+      "otherLinks": 2
+    },
+    {
+      "file": "Moda--Infantil.pdf",
+      "uniqueSupplierRecords": 11,
+      "supplierLinkOccurrences": 11,
+      "otherLinks": 0
+    },
+    {
+      "file": "Moda--Plus--Size.pdf",
+      "uniqueSupplierRecords": 6,
+      "supplierLinkOccurrences": 6,
+      "otherLinks": 0
+    },
+    {
+      "file": "TERCEIRIZAÇÃO.pdf",
+      "uniqueSupplierRecords": 8,
+      "supplierLinkOccurrences": 8,
+      "otherLinks": 3
+    }
+  ],
+  "unconfirmedAdditionalReferences": {
+    "distinctDriveURLs": 5,
+    "malformedAmongThem": 1,
+    "includedInConfirmedCount": false
+  }
+}

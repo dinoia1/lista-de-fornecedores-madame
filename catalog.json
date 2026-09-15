@@ -1,0 +1,22 @@
+[
+  {"id":"01","name":"Utilidades domésticas","group":"casa","description":"Um ponto de partida para pesquisar fornecedores de utilidades para a casa."},
+  {"id":"02","name":"Brinquedos","group":"casa","description":"Referências do segmento de brinquedos para orientar sua pesquisa de produtos."},
+  {"id":"03","name":"Papelaria","group":"casa","description":"Uma lista dedicada à pesquisa de fornecedores de papelaria."},
+  {"id":"04","name":"Eletrônicos","group":"tecnologia","description":"Caminhos para consultar fornecedores do segmento de eletrônicos."},
+  {"id":"05","name":"Pet","group":"casa","description":"Referências para pesquisar produtos e fornecedores do universo pet."},
+  {"id":"06","name":"Ferramentas","group":"tecnologia","description":"Uma lista voltada à busca de fornecedores de ferramentas."},
+  {"id":"07","name":"Queridinhos 1","group":"outras","description":"Primeira lista Queridinhos: referências reunidas para explorar diferentes opções."},
+  {"id":"08","name":"Queridinhos 2","group":"outras","description":"Segunda lista Queridinhos, com mais referências para sua pesquisa."},
+  {"id":"09","name":"Maquiagens e cosméticos","group":"beleza","description":"Referências do setor de beleza, com foco em maquiagens e cosméticos."},
+  {"id":"10","name":"Acessórios","group":"beleza","description":"Fornecedores de acessórios, incluindo fabricantes de semijoias."},
+  {"id":"11","name":"Bolsas e malas","group":"beleza","description":"Referências de bolsas e malas, incluindo empresas importadoras."},
+  {"id":"12","name":"Dropshipping","group":"outras","description":"Lista temática de dropshipping. Consulte o modelo de operação com cada empresa."},
+  {"id":"13","name":"Feira Abrin","group":"outras","description":"Lista de fornecedores relacionada à Feira Abrin e ao segmento de brinquedos."},
+  {"id":"14","name":"Feira FIT","group":"moda","description":"Referências da Feira FIT 0/16, voltadas à moda infantil e a enxovais."},
+  {"id":"15","name":"Moda Feminina 1","group":"moda","description":"Primeiro volume de moda feminina, com referências que incluem alfaiataria."},
+  {"id":"16","name":"Moda Feminina 2","group":"moda","description":"Segundo volume de moda feminina, com referências de roupas e estampas."},
+  {"id":"17","name":"Moda Feminina 3","group":"moda","description":"Terceiro volume de moda feminina, incluindo referências de malhas e tricô."},
+  {"id":"18","name":"Moda infantil","group":"moda","description":"Uma lista dedicada a fornecedores de roupas para o público infantil."},
+  {"id":"19","name":"Moda plus size","group":"moda","description":"Referências de moda plus size, com opções descritas como canelados e estampados."},
+  {"id":"20","name":"Terceirização","group":"outras","description":"Lista temática para pesquisar empresas e consultar possibilidades de terceirização."}
+]
