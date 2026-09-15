@@ -29,12 +29,14 @@
   new IntersectionObserver(entries => { inView = entries[0].isIntersecting; $('.mobile-sticky').hidden = inView; syncVideo(); },{threshold:0}).observe($('.hero'));
   syncVideo();
   const config = window.MADAME_CONFIG || {};
-  const offer = $('#explore-complete');
   let checkout = null;
   if(config.checkoutUrl) { try { const url = new URL(config.checkoutUrl); if(url.protocol === 'https:' && !url.username && !url.password)checkout = url.href; } catch {} }
   if(checkout) {
-    offer.href = checkout;
-    offer.replaceChildren(document.createTextNode(config.purchaseLabel || 'Conhecer a oferta'));
+    document.querySelectorAll('#explore-complete, .mobile-sticky a').forEach(offer => {
+      offer.href = checkout;
+      offer.firstChild.textContent = (config.purchaseLabel || 'Comprar agora') + ' ';
+    });
+    $('.mobile-sticky').setAttribute('aria-label','Comprar a coleção');
   }
   const labels = {price:'Valor',installments:'Pagamento',guarantee:'Garantia',accessPeriod:'Acesso',updates:'Atualizações'};
   const terms = $('#offer-terms');

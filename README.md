@@ -33,7 +33,7 @@ npm.cmd run check
 
 Não edite diretamente `public/index.html`: ele é gerado a partir de `template.html` e `catalog.json`. Alterações em CSS, JS, imagens e configuração dispensam build.
 
-O checkout começa como `null`. Sem um endereço HTTPS válido, o botão da oferta abre todas as listas. Nenhum preço ou condição comercial é exibido enquanto seu campo estiver vazio. Preencha apenas informações confirmadas. Exemplo de formato (substitua pelo endereço real):
+O checkout está configurado para `https://lastlink.com/p/C01555529/checkout-payment/`, informado pelo usuário. O botão da oferta e o botão fixo mobile usam esse endereço com o texto “Comprar agora”. Sem um endereço HTTPS válido, os botões levam à seção de apresentação do formato. Nenhum preço ou condição comercial é exibido enquanto seu campo estiver vazio. Preencha apenas informações confirmadas. Exemplo de formato para futuras alterações:
 
 ```js
 checkoutUrl: 'https://seu-provedor.com/seu-checkout',
